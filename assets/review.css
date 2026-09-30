@@ -1,0 +1,20 @@
+
+:root{color-scheme:light;--ink:#182d3c;--line:#cdd8df;--accent:#096979}
+*{box-sizing:border-box}body{margin:0;color:var(--ink);background:#f3f6f8;font:16px/1.6 system-ui,sans-serif}
+a{color:var(--accent)}header{background:#102d3b;color:#fff;padding:36px max(5%,20px)}header a{color:#ace7ed}
+h1{font-size:clamp(25px,4vw,38px);line-height:1.2;margin:14px 0}header p{max-width:1000px}
+main{max-width:1500px;margin:auto;padding:28px 4%}h2{font-size:21px}h3{font-size:16px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px}
+.card,section,.note,nav.files{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:20px}
+.card h2{margin-top:0}.meta{font-size:13px;overflow-wrap:anywhere}.badge{display:inline-block;background:#d8f1e8;color:#145540;padding:3px 10px;border-radius:20px}
+.files ul{columns:2 320px;padding-left:22px}.files a,section h2{overflow-wrap:anywhere}
+input{font:inherit;width:min(100%,650px);padding:10px;border:1px solid #98b2bf;border-radius:5px}
+.legend{display:flex;gap:12px;flex-wrap:wrap}.legend span{padding:2px 8px;border-radius:3px}
+.scroll{overflow:auto;max-height:75vh;border:1px solid var(--line)}table.diff{border-collapse:collapse;font:12px/1.65 Consolas,monospace;width:100%}
+td{vertical-align:top}td[nowrap]{padding:0 8px;min-width:300px}.diff_header{background:#edf2f5;color:#465e6b;padding:0 7px;text-align:right}
+th.diff_header{position:sticky;top:0;text-align:left;padding:8px;z-index:1}.diff_next{background:#e6edf1;padding:0 4px}
+.diff_add{background:#c8f1d4;color:#154b29}.diff_sub{background:#ffd7d9;color:#75242c}.diff_chg{background:#ffe9aa;color:#634c09}
+button{font:inherit;border:1px solid #9ab0bc;background:#f7fafb;border-radius:5px;padding:6px 12px;cursor:pointer;margin:6px 8px 12px 0}
+button:disabled{opacity:.5;cursor:default}summary{cursor:pointer;padding:12px 0}.complete{display:grid;grid-template-columns:1fr 1fr;gap:18px}.complete>div{min-width:0}
+pre{overflow:auto;max-height:65vh;background:#f2f5f7;padding:14px;font:12px/1.6 Consolas,monospace}footer{padding:24px 4%;text-align:center}code{overflow-wrap:anywhere}
+[hidden]{display:none!important}@media(max-width:700px){.complete{grid-template-columns:1fr}section{padding:12px}.files ul{columns:1}}
