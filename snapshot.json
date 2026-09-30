@@ -1,0 +1,294 @@
+{
+  "baseline": "1ee24e546d3a4e3d465c722cb7c5cb0220b8bff4",
+  "head": "6e88ff5257f235ba406d57cc7b015f950fed28a3",
+  "snapshot": "2026-09-30 working tree",
+  "files": [
+    {
+      "path": "src/EterLib/GraphicsStartup.h",
+      "page": "device.html",
+      "anchor": "file-0",
+      "before_sha256": null,
+      "after_sha256": "b675193c10f6fc8177e53b3bba2275f8d4a309dbf8edeeb172e6692852e50c4c"
+    },
+    {
+      "path": "src/EterLib/GrpDevice.cpp",
+      "page": "device.html",
+      "anchor": "file-1",
+      "before_sha256": "9c55f0d35b296dcc1d31cba6e4353d1c35318bff15132280528333b6e226f0de",
+      "after_sha256": "c7c72ad455d15979c9bc16105b1ae62d3edf3558ba7a1a7d195974dba3ebc256"
+    },
+    {
+      "path": "src/EterLib/GrpDevice.h",
+      "page": "device.html",
+      "anchor": "file-2",
+      "before_sha256": "733015053ca469a69488aa8ae2b7290f63b95a314bbc7b74942bf43bae91d3b3",
+      "after_sha256": "32c3d51f424828c4e9af93bb989a71086fbdda8589ef7e9f1761fc201ab3fb27"
+    },
+    {
+      "path": "src/UserInterface/PythonApplication.cpp",
+      "page": "device.html",
+      "anchor": "file-3",
+      "before_sha256": "f43ae2ebfe17332ceb633dad9b0925d22672c6bbcc9233b71f7c72b2e9db9164",
+      "after_sha256": "864d754fb5ba92b191cbbb99912f4c0c40ced6fa54e19dcd5177fc99d01359d8"
+    },
+    {
+      "path": "src/UserInterface/PythonApplication.h",
+      "page": "device.html",
+      "anchor": "file-4",
+      "before_sha256": "19eb163438cca85a3355415979aa1467a65faa6334d44cf2b5f622ed87c46ca7",
+      "after_sha256": "13e9ff898dc8c0a63a5aa41b76f6db9df18ea3c234f6476269301f3516f065a8"
+    },
+    {
+      "path": "src/UserInterface/PythonApplicationProcedure.cpp",
+      "page": "device.html",
+      "anchor": "file-5",
+      "before_sha256": "387837d46e128080398f27ec3a3331493ba6634bd19189e1f6f99d5aac5eab3b",
+      "after_sha256": "0f4a465ce6924c968b099d4a33e00ead640190eea52af5d26a880cabc8fbefc1"
+    },
+    {
+      "path": "src/EterImageLib/DDSTextureLoader9.cpp",
+      "page": "textures.html",
+      "anchor": "file-0",
+      "before_sha256": "ff30f5cf82eef27da517e28daa5994ad255fc1804a1a43ca5fb0014ff7261cee",
+      "after_sha256": "acc6a11f32b792ffa205aa264603aed6735bf70c89ad0eed3208e7022135ac60"
+    },
+    {
+      "path": "src/EterLib/GrpImageTexture.cpp",
+      "page": "textures.html",
+      "anchor": "file-1",
+      "before_sha256": "194aa8b85e0e10b1dd4e60e360b24505e532a947b1f55fab6ac13461600bd9a8",
+      "after_sha256": "5a89c3a7e08bc60c0f82236971453b7896664a5a917afc720fdcd9f6358a02f9"
+    },
+    {
+      "path": "src/EterLib/GrpImageTexture.h",
+      "page": "textures.html",
+      "anchor": "file-2",
+      "before_sha256": "c4cc7612c9a46c9afc37edeee791916af5a87c3efaeffc5134eb03ea9ebe11c2",
+      "after_sha256": "a2410de8c16293286cdb47bdde3626c04236adbbee814df0ff0b719c2b4661e3"
+    },
+    {
+      "path": "src/EterLib/GrpTexture.cpp",
+      "page": "textures.html",
+      "anchor": "file-3",
+      "before_sha256": "c7378470f5ea8c7a0479d62ffb56c221ed6d4846e120dd42c3fb55c55eb9b971",
+      "after_sha256": "2a955528f54bf99694cc3ede47f36bee9c583f4f64d6baabfe3ae03abc8ca36f"
+    },
+    {
+      "path": "src/EterLib/RGBA8Upload.h",
+      "page": "textures.html",
+      "anchor": "file-4",
+      "before_sha256": null,
+      "after_sha256": "e0891d259a26e153da9dfb46a1628030e1033caac1a9e05303357b2534f72cbe"
+    },
+    {
+      "path": "src/EterLib/CRenderTarget.cpp",
+      "page": "targets.html",
+      "anchor": "file-0",
+      "before_sha256": "0cf9f906fc4352c9d13f5b3763822dbb14743e963d52d6d37fe830f5ace5a59d",
+      "after_sha256": "f07d68f4d47d216a70d141c4e1c88ad36cb77d1da3c4282ecb527a1e592c8258"
+    },
+    {
+      "path": "src/EterLib/CRenderTargetManager.cpp",
+      "page": "targets.html",
+      "anchor": "file-1",
+      "before_sha256": "995e16a180799a250164612d7caef021f36cf95a21303ebf3334b4070047aacb",
+      "after_sha256": "c911ed69f658ad2fd986ce2a8c0a2be09c5f5ae04c71f91d636bbec44550d5a9"
+    },
+    {
+      "path": "src/EterLib/Camera.h",
+      "page": "targets.html",
+      "anchor": "file-2",
+      "before_sha256": "bf2aa6f7dac33768f7c97235d4c12f4e4aa61c5d0f9da03840d79fe8ac252eca",
+      "after_sha256": "549114ea51b89b257df6a44dcc9f746c57b1fb014926cc26d3ef0f5caeb11d9d"
+    },
+    {
+      "path": "src/EterLib/GrpRenderTargetTexture.cpp",
+      "page": "targets.html",
+      "anchor": "file-3",
+      "before_sha256": "60de51fc9ae7126de2580239715738695fd594f26d2711de41ef149b42a2fa57",
+      "after_sha256": "42bed600489fdd2afb07279af395b65f91d931a3cf198e05288ad2f1cb1f5f6b"
+    },
+    {
+      "path": "src/EterLib/GrpRenderTargetTexture.h",
+      "page": "targets.html",
+      "anchor": "file-4",
+      "before_sha256": "fbb2718a15f6b2a1604b950eaa3499b97f3583f49af81b3e3775cf00729bd629",
+      "after_sha256": "93a6ad07c0c6c7db7eb5f1a193dd9961042bc2e22bd54ac8294fa971db84aec1"
+    },
+    {
+      "path": "src/EterLib/GrpShadowTexture.cpp",
+      "page": "targets.html",
+      "anchor": "file-5",
+      "before_sha256": "90791e7675d788df6453bceec0ac76278343f81f36b42874587f651aaf971f8b",
+      "after_sha256": "31c4e4bcad522a3d60703a21cdbbd0ccdf940c7b13cde2c4dd82af5bdb6cbf9f"
+    },
+    {
+      "path": "src/EterLib/PreviewRenderState.h",
+      "page": "targets.html",
+      "anchor": "file-6",
+      "before_sha256": null,
+      "after_sha256": "5880536d55b25da411cef0b5066158dbf7a8edf3a54bd95844da7bf6194db845"
+    },
+    {
+      "path": "src/EterLib/RenderTargetBinding.h",
+      "page": "targets.html",
+      "anchor": "file-7",
+      "before_sha256": null,
+      "after_sha256": "31a1e69df6acd524ed3593827599a349faa5ecaaba4235a2f64b5678e14834b0"
+    },
+    {
+      "path": "src/GameLib/MapOutdoor.cpp",
+      "page": "targets.html",
+      "anchor": "file-8",
+      "before_sha256": "380990ae8844dc519c51f4bd965c3ac8c65aaf456e75d85152874d535556626d",
+      "after_sha256": "d3716c2066cc205e252ac270709d85b222318010324f734b8d28d92dd136e92b"
+    },
+    {
+      "path": "src/GameLib/MapOutdoor.h",
+      "page": "targets.html",
+      "anchor": "file-9",
+      "before_sha256": "edc11d5a8abebfd37bf5ed69fd6869c554ff02cd590143a513a24c16ea4d96b7",
+      "after_sha256": "ae1fa5621968edb0c53c2bef50fbdd2c97b92eb35d41662219cac47736900e93"
+    },
+    {
+      "path": "src/GameLib/MapOutdoorCharacterShadow.cpp",
+      "page": "targets.html",
+      "anchor": "file-10",
+      "before_sha256": "5ad86769c8af4283d1673a5c106a5b22af026ef4e36078d9ca41c7d0d9c89e3e",
+      "after_sha256": "03e9f08087f77cffe7c920ae7022a61ac54dc1e25d048cfa4c368e0db29d2735"
+    },
+    {
+      "path": "src/EterLib/DrawingStateCache.h",
+      "page": "state.html",
+      "anchor": "file-0",
+      "before_sha256": null,
+      "after_sha256": "f93f22099d1186f065517acf5e75a601f95bc22a1102c83c3cd48051fb21b6a1"
+    },
+    {
+      "path": "src/EterLib/GraphicsRestoreStatus.h",
+      "page": "state.html",
+      "anchor": "file-1",
+      "before_sha256": null,
+      "after_sha256": "bed3e866a3ba244c1c468385715d5d5e7510bf64edf5150f5f80d77665f6053e"
+    },
+    {
+      "path": "src/EterLib/GrpScreen.cpp",
+      "page": "state.html",
+      "anchor": "file-2",
+      "before_sha256": "e5b1cd1bded1194a92653e1a73631f8d1024f0fc188f4aaf6757d4de04c8c3df",
+      "after_sha256": "a1cd5ced0a3ce09e1fba4cc568d560a0c0bad867bef9725cc93b98892a50486c"
+    },
+    {
+      "path": "src/EterLib/GrpScreen.h",
+      "page": "state.html",
+      "anchor": "file-3",
+      "before_sha256": "489052831f3d805cc8bbf94318b067803e09abbb5e50269c77b378608b204a99",
+      "after_sha256": "770d14e7af913d059806e562c37002a30a8aabe2e82c12d4c7792bdbe9d22035"
+    },
+    {
+      "path": "src/EterLib/SamplerStateCache.h",
+      "page": "state.html",
+      "anchor": "file-4",
+      "before_sha256": null,
+      "after_sha256": "d31944fdc632142e3e2bf01b864717c79efff5b62eb712cec54fc0050f7d9c2b"
+    },
+    {
+      "path": "src/EterLib/StateManager.cpp",
+      "page": "state.html",
+      "anchor": "file-5",
+      "before_sha256": "5f9ba02907f8aee98b55fe662b1640de5ddf23efc5c297d5d51d2c4df1501027",
+      "after_sha256": "d693c28fe44f095d3cb65a5fef89359024a5fa8257dcf30252da8e9d3224e1f3"
+    },
+    {
+      "path": "src/EterLib/StateManager.h",
+      "page": "state.html",
+      "anchor": "file-6",
+      "before_sha256": "e4cb09050c5f52f64fd67e7969f61f6365c9627ea1a0d481a27ce161883afba2",
+      "after_sha256": "590efbf7e6200eb65c94f75b1c3ae40d400e97ee742d1b9671fa0a3455a2982f"
+    },
+    {
+      "path": "src/EterPythonLib/PythonGraphic.cpp",
+      "page": "state.html",
+      "anchor": "file-7",
+      "before_sha256": "7721b35ae3803b66d9069288eaa6a400e350529a0f32d2bc3275ada3255709cf",
+      "after_sha256": "5694d4d538e27ce1a220d740c89100770945d41ba737b3decf5b7595d86b8397"
+    },
+    {
+      "path": "src/EterGrnLib/LODController.cpp",
+      "page": "geometry.html",
+      "anchor": "file-0",
+      "before_sha256": "205d7c0346929095fcfb64b9f8e7fc7fc4a543ec4d028fc8d2bfd1dc76c6bb3a",
+      "after_sha256": "0f35af1ef53f3bc871d9d759a8e418a068832bf3bcfd5ff0ff07a57de0a8cbb0"
+    },
+    {
+      "path": "src/EterGrnLib/Model.cpp",
+      "page": "geometry.html",
+      "anchor": "file-1",
+      "before_sha256": "63805f041fed00f34d217569976660aed6df459282b9a683db25fa8906fd648d",
+      "after_sha256": "29fa240986b2555255e966797e3ba577c18ee97ecd03a0c8b564874fcc36455f"
+    },
+    {
+      "path": "src/EterLib/GeometryBufferUpload.h",
+      "page": "geometry.html",
+      "anchor": "file-2",
+      "before_sha256": null,
+      "after_sha256": "00a97d0c6ce20042a211ebb6c8bfa376ce51cb2a9d99da7e0411f15f896c3602"
+    },
+    {
+      "path": "src/EterLib/GrpIndexBuffer.cpp",
+      "page": "geometry.html",
+      "anchor": "file-3",
+      "before_sha256": "895ced27d60575353ac0e2d9b511912983dbcf50d4570e6d12ca1141f7cb104a",
+      "after_sha256": "40fa64e7a6227966eb070738c1aabddf52c3742f102bc8a7964e5d68dc1497f7"
+    },
+    {
+      "path": "src/EterLib/GrpIndexBuffer.h",
+      "page": "geometry.html",
+      "anchor": "file-4",
+      "before_sha256": "963589d9172bd4a2b0153b82b696b3358f10f55ba9e51858f9ea03ab5710e262",
+      "after_sha256": "2dccf25081946792094d5efa1131844dd172e6a313a929689ca14617870bee9e"
+    },
+    {
+      "path": "src/EterLib/GrpVertexBuffer.cpp",
+      "page": "geometry.html",
+      "anchor": "file-5",
+      "before_sha256": "7d34dd592044d4199f5f53b90a3d23b987c2d3465fbe3f0cfa0f7cb23f2a3232",
+      "after_sha256": "99e61d1a7272e881be47cf7bfe054057f80b1b76e8e78311274221621623e422"
+    },
+    {
+      "path": "src/GameLib/SnowEnvironment.cpp",
+      "page": "snow.html",
+      "anchor": "file-0",
+      "before_sha256": "841d846060b32761b1cda52aa1e0cbcf3d28dfb24abca0e73c76cd9bb965e85b",
+      "after_sha256": "e4bfe5f2f7853533e35ef74626cb0c42c7e1330e70abeed0f48816e91d18d021"
+    },
+    {
+      "path": "src/GameLib/SnowEnvironment.h",
+      "page": "snow.html",
+      "anchor": "file-1",
+      "before_sha256": "73f9c5db6d36e7780e876544554af2371e7c3018331cf66d610a36191bac1acc",
+      "after_sha256": "1b4d9fc87e91fd0a4514f9d11e35d70b87a97617ed516155856f49ce3ad90997"
+    },
+    {
+      "path": "src/EterLib/GraphicsSelfTest.cpp",
+      "page": "tests.html",
+      "anchor": "file-0",
+      "before_sha256": null,
+      "after_sha256": "e8156a3e20c03a4c0fd4e6146557e444edfee5bdd0541612c3b1433688dd522c"
+    },
+    {
+      "path": "src/EterLib/GraphicsSelfTest.h",
+      "page": "tests.html",
+      "anchor": "file-1",
+      "before_sha256": null,
+      "after_sha256": "b802978fe52d506c469bbef305136f3cb58ad67e84d0895537d25be8835c3985"
+    },
+    {
+      "path": "src/UserInterface/UserInterface.cpp",
+      "page": "tests.html",
+      "anchor": "file-2",
+      "before_sha256": "a5c97d3fca78cb655fd1f973a56ec1b93e65afababe0bc7c239e97d78e2b00b4",
+      "after_sha256": "de4643eec5aea0c9e42d4e83cc000fc8c8ec5c8c83b87f041e9f89bb02beb2b3"
+    }
+  ]
+}

@@ -1,0 +1,1184 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Snow resources and rendering | Metin2 DX9Ex review</title><link rel="stylesheet" href="assets/review.css">
+<script src="assets/review.js" defer></script></head><body>
+<header><a href="index.html">Metin2 / DX9Ex source review</a><h1>Snow resources and rendering</h1><p>The accepted v12 repair: failed activation cleanup, checked uploads and restoration of drawing state and blur targets.</p>
+<p class="meta">Baseline 1ee24e5 → working-tree snapshot, 2026-09-30 · HEAD 6e88ff5 · checkpoints v1–v12</p></header>
+<main><p class="note">Files are grouped by their primary responsibility. Shared files can contain fixes from several checkpoints. These pages are a cumulative review, not independently applicable patches. Review dependencies across topics when adapting the code.</p><nav class="files" aria-label="Files in this topic"><label for="filter">Find a file in this topic</label><br><input id="filter" type="search" placeholder="Filename or path"><ul><li data-search="src/gamelib/snowenvironment.cpp"><a href="#file-0">src/GameLib/SnowEnvironment.cpp</a></li><li data-search="src/gamelib/snowenvironment.h"><a href="#file-1">src/GameLib/SnowEnvironment.h</a></li></ul></nav><p class="legend"><span class="diff_sub">Removed</span><span class="diff_add">Added</span><span class="diff_chg">Changed within line</span></p><section id="file-0" data-search="src/gamelib/snowenvironment.cpp"><h2>src/GameLib/SnowEnvironment.cpp</h2><p class="meta">Modified file</p><button data-file="file-0" data-download="before" >Download before</button><button data-file="file-0" data-download="after" >Download after</button><div class="scroll" tabindex="0" role="region" aria-label="Before and after code for src/GameLib/SnowEnvironment.cpp">
+    <table class="diff" id="difflib_chg_to36__top"
+           cellspacing="0" cellpadding="0" rules="groups" >
+        <colgroup></colgroup> <colgroup></colgroup> <colgroup></colgroup>
+        <colgroup></colgroup> <colgroup></colgroup> <colgroup></colgroup>
+        <thead><tr><th class="diff_next"><br /></th><th colspan="2" class="diff_header">Previous · 1ee24e5</th><th class="diff_next"><br /></th><th colspan="2" class="diff_header">Updated · v12 snapshot</th></tr></thead>
+        <tbody>
+            <tr><td class="diff_next" id="difflib_chg_to36__0"><a href="#difflib_chg_to36__0">f</a></td><td class="diff_header" id="from36_1">1</td><td nowrap="nowrap">#include&nbsp;"StdAfx.h"</td><td class="diff_next"><a href="#difflib_chg_to36__0">f</a></td><td class="diff_header" id="to36_1">1</td><td nowrap="nowrap">#include&nbsp;"StdAfx.h"</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_2">2</td><td nowrap="nowrap">#include&nbsp;"SnowEnvironment.h"</td><td class="diff_next"></td><td class="diff_header" id="to36_2">2</td><td nowrap="nowrap">#include&nbsp;"SnowEnvironment.h"</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__1"></td><td class="diff_header" id="from36_3">3</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_3">3</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__1">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"><a href="#difflib_chg_to36__1">n</a></td><td class="diff_header" id="to36_4">4</td><td nowrap="nowrap"><span class="diff_add">#include&nbsp;"EterLib/GrpImageInstance.h"</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_4">4</td><td nowrap="nowrap">#include&nbsp;"EterLib/StateManager.h"</td><td class="diff_next"></td><td class="diff_header" id="to36_5">5</td><td nowrap="nowrap">#include&nbsp;"EterLib/StateManager.h"</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_5">5</td><td nowrap="nowrap">#include&nbsp;"EterLib/Camera.h"</td><td class="diff_next"></td><td class="diff_header" id="to36_6">6</td><td nowrap="nowrap">#include&nbsp;"EterLib/Camera.h"</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_6">6</td><td nowrap="nowrap">#include&nbsp;"EterLib/ResourceManager.h"</td><td class="diff_next"></td><td class="diff_header" id="to36_7">7</td><td nowrap="nowrap">#include&nbsp;"EterLib/ResourceManager.h"</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_7">7</td><td nowrap="nowrap">#include&nbsp;"SnowParticle.h"</td><td class="diff_next"></td><td class="diff_header" id="to36_8">8</td><td nowrap="nowrap">#include&nbsp;"SnowParticle.h"</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__2"><a href="#difflib_chg_to36__2">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"><a href="#difflib_chg_to36__2">n</a></td><td class="diff_header" id="to36_9">9</td><td nowrap="nowrap"><span class="diff_add">#include&nbsp;"EterLib/GraphicsStartup.h"</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_10">10</td><td nowrap="nowrap"><span class="diff_add">#include&nbsp;"EterLib/RenderTargetBinding.h"</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_11">11</td><td nowrap="nowrap"><span class="diff_add">#include&nbsp;"EterLib/GeometryBufferUpload.h"</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_8">8</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_12">12</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_9">9</td><td nowrap="nowrap">void&nbsp;CSnowEnvironment::Enable()</td><td class="diff_next"></td><td class="diff_header" id="to36_13">13</td><td nowrap="nowrap">void&nbsp;CSnowEnvironment::Enable()</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_10">10</td><td nowrap="nowrap">{</td><td class="diff_next"></td><td class="diff_header" id="to36_14">14</td><td nowrap="nowrap">{</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__3">n</a></td><td class="diff_header" id="from36_11">11</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(<span class="diff_sub">!</span>m_bSnowEnable)</td><td class="diff_next"><a href="#difflib_chg_to36__3">n</a></td><td class="diff_header" id="to36_15">15</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(m_bSnowEnable)<span class="diff_add">&nbsp;return;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_12">12</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;{</span></td><td class="diff_next"></td><td class="diff_header" id="to36_16">16</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!Create())</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_13">13</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create();</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_14">14</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_chg">}</span></td><td class="diff_next"></td><td class="diff_header" id="to36_17">17</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_chg">{</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_15">15</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header" id="to36_18">18</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TraceError("Graphics:&nbsp;snow&nbsp;creation&nbsp;failed;&nbsp;effect&nbsp;remains&nbsp;disabled");</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_19">19</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_20">20</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;}</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_16">16</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_bSnowEnable&nbsp;=&nbsp;TRUE;</td><td class="diff_next"></td><td class="diff_header" id="to36_21">21</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_bSnowEnable&nbsp;=&nbsp;TRUE;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_17">17</td><td nowrap="nowrap">}</td><td class="diff_next"></td><td class="diff_header" id="to36_22">22</td><td nowrap="nowrap">}</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_18">18</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_23">23</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_19">19</td><td nowrap="nowrap">void&nbsp;CSnowEnvironment::Disable()</td><td class="diff_next"></td><td class="diff_header" id="to36_24">24</td><td nowrap="nowrap">void&nbsp;CSnowEnvironment::Disable()</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_20">20</td><td nowrap="nowrap">{</td><td class="diff_next"></td><td class="diff_header" id="to36_25">25</td><td nowrap="nowrap">{</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_21">21</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_bSnowEnable&nbsp;=&nbsp;FALSE;</td><td class="diff_next"></td><td class="diff_header" id="to36_26">26</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_bSnowEnable&nbsp;=&nbsp;FALSE;</td></tr>
+        </tbody>        
+        <tbody>
+            <tr><td class="diff_next" id="difflib_chg_to36__3"></td><td class="diff_header" id="from36_73">73</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++itor;</td><td class="diff_next"></td><td class="diff_header" id="to36_78">78</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++itor;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_74">74</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td><td class="diff_next"></td><td class="diff_header" id="to36_79">79</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_75">75</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;}</td><td class="diff_next"></td><td class="diff_header" id="to36_80">80</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;}</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_76">76</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_81">81</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_77">77</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(m_bSnowEnable)</td><td class="diff_next"></td><td class="diff_header" id="to36_82">82</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(m_bSnowEnable)</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_78">78</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;{</td><td class="diff_next"></td><td class="diff_header" id="to36_83">83</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;{</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__4">n</a></td><td class="diff_header" id="from36_79">79</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(int&nbsp;p&nbsp;=&nbsp;0;&nbsp;p&nbsp;&lt;&nbsp;std::min(10ull,&nbsp;m_dwParticleMaxNum&nbsp;-&nbsp;m_kVct_pkParticleSnow.size());&nbsp;++p)</span></td><td class="diff_next"><a href="#difflib_chg_to36__4">n</a></td><td class="diff_header" id="to36_84">84</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;size_t&nbsp;available&nbsp;=&nbsp;m_kVct_pkParticleSnow.size()&nbsp;&lt;&nbsp;m_dwParticleMaxNum&nbsp;?&nbsp;m_dwParticleMax</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_add">Num&nbsp;-&nbsp;m_kVct_pkParticleSnow.size()&nbsp;:&nbsp;0;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_85">85</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(size_t&nbsp;p&nbsp;=&nbsp;0;&nbsp;p&nbsp;&lt;&nbsp;(std::min)(size_t(10),&nbsp;available&nbsp;-&nbsp;p);&nbsp;++p)</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_80">80</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td><td class="diff_next"></td><td class="diff_header" id="to36_86">86</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_81">81</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CSnowParticle&nbsp;*&nbsp;pSnowParticle&nbsp;=&nbsp;CSnowParticle::New();</td><td class="diff_next"></td><td class="diff_header" id="to36_87">87</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CSnowParticle&nbsp;*&nbsp;pSnowParticle&nbsp;=&nbsp;CSnowParticle::New();</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__4"></td><td class="diff_header" id="from36_82">82</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pSnowParticle-&gt;Init(v3ChangedPos);</td><td class="diff_next"></td><td class="diff_header" id="to36_88">88</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pSnowParticle-&gt;Init(v3ChangedPos);</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_83">83</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_kVct_pkParticleSnow.push_back(pSnowParticle);</td><td class="diff_next"></td><td class="diff_header" id="to36_89">89</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_kVct_pkParticleSnow.push_back(pSnowParticle);</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_84">84</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td><td class="diff_next"></td><td class="diff_header" id="to36_90">90</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_85">85</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;}</td><td class="diff_next"></td><td class="diff_header" id="to36_91">91</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;}</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_86">86</td><td nowrap="nowrap">}</td><td class="diff_next"></td><td class="diff_header" id="to36_92">92</td><td nowrap="nowrap">}</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_87">87</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_93">93</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__5">n</a></td><td class="diff_header" id="from36_88">88</td><td nowrap="nowrap"><span class="diff_sub">void&nbsp;CSnowEnvironment::__BeginBlur()</span></td><td class="diff_next"><a href="#difflib_chg_to36__5">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_89">89</td><td nowrap="nowrap"><span class="diff_sub">{</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_90">90</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!m_bBlurEnable)</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_91">91</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_92">92</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_93">93</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;ms_lpd3dDevice-&gt;GetRenderTarget(0,&nbsp;&amp;m_lpOldSurface);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_94">94</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;ms_lpd3dDevice-&gt;GetDepthStencilSurface(&amp;m_lpOldDepthStencilSurface);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_95">95</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;ms_lpd3dDevice-&gt;SetDepthStencilSurface(m_lpSnowDepthSurface);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_96">96</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;ms_lpd3dDevice-&gt;SetRenderTarget(0,&nbsp;m_lpSnowRenderTargetSurface);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_97">97</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;ms_lpd3dDevice-&gt;Clear(0L,&nbsp;NULL,&nbsp;D3DCLEAR_TARGET&nbsp;|&nbsp;D3DCLEAR_ZBUFFER,&nbsp;0x00000000,&nbsp;1.0f,&nbsp;0L);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_98">98</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_99">99</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetRenderState(D3DRS_ALPHABLENDENABLE,&nbsp;TRUE);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_100">100</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetRenderState(D3DRS_SRCBLEND,&nbsp;D3DBLEND_SRCALPHA);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_101">101</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetRenderState(D3DRS_DESTBLEND,&nbsp;D3DBLEND_DESTALPHA);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_102">102</td><td nowrap="nowrap"><span class="diff_sub">}</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_103">103</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_104">104</td><td nowrap="nowrap"><span class="diff_sub">void&nbsp;CSnowEnvironment::__ApplyBlur()</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_105">105</td><td nowrap="nowrap"><span class="diff_sub">{</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_106">106</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!m_bBlurEnable)</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_107">107</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_108">108</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_109">109</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_110">110</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetRenderState(&nbsp;D3DRS_ALPHABLENDENABLE,&nbsp;&nbsp;&nbsp;TRUE&nbsp;);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_111">111</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetRenderState(&nbsp;D3DRS_SRCBLEND,&nbsp;&nbsp;D3DBLEND_SRCALPHA&nbsp;);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_112">112</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetRenderState(&nbsp;D3DRS_DESTBLEND,&nbsp;D3DBLEND_INVSRCALPHA&nbsp;);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_113">113</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetRenderState(&nbsp;D3DRS_COLORVERTEX&nbsp;,TRUE);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_114">114</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetRenderState(&nbsp;D3DRS_DIFFUSEMATERIALSOURCE&nbsp;,&nbsp;D3DMCS_COLOR1&nbsp;);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_115">115</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTextureStageState(0,&nbsp;D3DTSS_COLOROP,&nbsp;D3DTOP_MODULATE);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_116">116</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTextureStageState(0,&nbsp;D3DTSS_COLORARG1,&nbsp;D3DTA_TEXTURE);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_117">117</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTextureStageState(0,&nbsp;D3DTSS_COLORARG2,&nbsp;D3DTA_DIFFUSE);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_118">118</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTextureStageState(0,&nbsp;D3DTSS_ALPHAOP,&nbsp;D3DTOP_MODULATE);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_119">119</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTextureStageState(0,&nbsp;D3DTSS_ALPHAARG1,&nbsp;D3DTA_TEXTURE);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_120">120</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTextureStageState(0,&nbsp;&nbsp;D3DTSS_ALPHAARG2,&nbsp;D3DTA_DIFFUSE);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_121">121</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DWORD&nbsp;&nbsp;&nbsp;alphaColor&nbsp;=&nbsp;0xFFFFFF&nbsp;|&nbsp;((DWORD)(0.6f*255.0f)&nbsp;&lt;&lt;&nbsp;24);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_122">122</td><td nowrap="nowrap"><span class="diff_sub">//</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_123">123</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex&nbsp;V[4]&nbsp;=&nbsp;{&nbsp;BlurVertex(D3DXVECTOR3(0.0f,0.0f,0.0f),1.0f,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alphaColor,&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_sub">0,0)&nbsp;,</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_124">124</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex(D3DXVECTOR3(wTextureSize,0.0f,0.0f),1.0f,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alph</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_sub">aColor,&nbsp;1,0)&nbsp;,&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_125">125</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex(D3DXVECTOR3(0.0f,wTextureSize,0.0f),1.0f,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alph</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_sub">aColor,&nbsp;0,1)&nbsp;,&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_126">126</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex(D3DXVECTOR3(wTextureSize,wTextureSize,0.0f),1.0f,&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_sub">alphaColor,&nbsp;1,1)&nbsp;};</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_127">127</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//누적&nbsp;블러&nbsp;텍스쳐를&nbsp;찍는다.</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_128">128</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTexture(0,m_lpAccumTexture);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_129">129</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetFVF(&nbsp;D3DFVF_XYZRHW&nbsp;|&nbsp;D3DFVF_DIFFUSE|D3DFVF_TEX1&nbsp;);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_130">130</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,2,V,sizeof(BlurVertex));</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_131">131</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_132">132</td><td nowrap="nowrap"><span class="diff_sub">//</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_133">133</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_134">134</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetRenderTarget(m_lpAccumRenderTargetSurface,&nbsp;m_lpAccumDepthSurface);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_135">135</td><td nowrap="nowrap"><span class="diff_sub">//</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_136">136</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex&nbsp;V[4]&nbsp;=&nbsp;{&nbsp;BlurVertex(D3DXVECTOR3(0.0f,0.0f,0.0f),1.0f,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0xFFFFFF,&nbsp;0,</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_sub">0)&nbsp;,</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_137">137</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex(D3DXVECTOR3(wTextureSize,0.0f,0.0f),1.0f,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0xFF</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_sub">FFFF,&nbsp;1,0)&nbsp;,&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_138">138</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex(D3DXVECTOR3(0.0f,wTextureSize,0.0f),1.0f,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0xFF</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_sub">FFFF,&nbsp;0,1)&nbsp;,&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_139">139</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex(D3DXVECTOR3(wTextureSize,wTextureSize,0.0f),1.0f,&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_sub">0xFFFFFF,&nbsp;1,1)&nbsp;};</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_140">140</td><td nowrap="nowrap"><span class="diff_sub">//</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_141">141</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTexture(0,m_lpSnowTexture);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_142">142</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetRenderState(&nbsp;D3DRS_ALPHABLENDENABLE,&nbsp;&nbsp;&nbsp;FALSE);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_143">143</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetFVF(&nbsp;D3DFVF_XYZRHW&nbsp;|&nbsp;D3DFVF_DIFFUSE|D3DFVF_TEX1&nbsp;);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_144">144</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,2,V,sizeof(BlurVertex));</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_145">145</td><td nowrap="nowrap"><span class="diff_sub">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_146">146</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_147">147</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;///////////////</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_148">148</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;{</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_149">149</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_lpd3dDevice-&gt;SetDepthStencilSurface(m_lpOldDepthStencilSurface);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_150">150</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ms_lpd3dDevice-&gt;SetRenderTarget(0,&nbsp;m_lpOldSurface);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_151">151</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_152">152</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTexture(0,m_lpSnowTexture);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_153">153</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetRenderState(&nbsp;D3DRS_ALPHABLENDENABLE,&nbsp;&nbsp;&nbsp;TRUE);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_154">154</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_155">155</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DSURFACE_DESC&nbsp;desc;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_156">156</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_lpOldSurface-&gt;GetDesc(&amp;desc);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_157">157</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;float&nbsp;sx&nbsp;=&nbsp;(float)desc.Width&nbsp;;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_158">158</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;float&nbsp;sy&nbsp;=&nbsp;(float)desc.Height;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_159">159</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(&nbsp;m_lpOldSurface&nbsp;);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_160">160</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(&nbsp;m_lpOldDepthStencilSurface&nbsp;);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_161">161</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_162">162</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex&nbsp;V[4]&nbsp;=&nbsp;{&nbsp;BlurVertex(D3DXVECTOR3(0.0f,0.0f,0.0f),1.0f&nbsp;,0xFFFFFF,&nbsp;0,0)&nbsp;,</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_163">163</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex(D3DXVECTOR3(sx,0.0f,0.0f),1.0f&nbsp;&nbsp;&nbsp;,0xFFFFFF,&nbsp;1,0)&nbsp;,&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_164">164</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex(D3DXVECTOR3(0.0f,sy,0.0f),1.0f&nbsp;&nbsp;&nbsp;,0xFFFFFF,&nbsp;0,1)&nbsp;,&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_165">165</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex(D3DXVECTOR3(sx,sy,0.0f),1.0f&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,0xFFFFFF,&nbsp;1,1)&nbsp;};</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_166">166</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_167">167</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetFVF(&nbsp;D3DFVF_XYZRHW&nbsp;|&nbsp;D3DFVF_DIFFUSE|D3DFVF_TEX1&nbsp;);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__5"></td><td class="diff_header" id="from36_168">168</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,2,V,sizeof(BlurVertex));</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_169">169</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;}</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_170">170</td><td nowrap="nowrap"><span class="diff_sub">}</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_171">171</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__6"></td><td class="diff_header" id="from36_172">172</td><td nowrap="nowrap"><span class="diff_chg">v</span>o<span class="diff_chg">id</span>&nbsp;CSnowEnvironment::Render()</td><td class="diff_next"></td><td class="diff_header" id="to36_94">94</td><td nowrap="nowrap"><span class="diff_chg">b</span>o<span class="diff_chg">ol</span>&nbsp;CSnowEnvironment::Render()</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_173">173</td><td nowrap="nowrap">{</td><td class="diff_next"></td><td class="diff_header" id="to36_95">95</td><td nowrap="nowrap">{</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__6">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"><a href="#difflib_chg_to36__6">n</a></td><td class="diff_header" id="to36_96">96</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(CGraphicsRestoreStatus::Instance().IsBlocked())&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__7"></td><td class="diff_header" id="from36_174">174</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!m_bSnowEnable)</td><td class="diff_next"></td><td class="diff_header" id="to36_97">97</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!m_bSnowEnable)</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_175">175</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;{</td><td class="diff_next"></td><td class="diff_header" id="to36_98">98</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;{</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_176">176</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(m_kVct_pkParticleSnow.empty())</td><td class="diff_next"></td><td class="diff_header" id="to36_99">99</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(m_kVct_pkParticleSnow.empty())</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__7">n</a></td><td class="diff_header" id="from36_177">177</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;</td><td class="diff_next"><a href="#difflib_chg_to36__7">n</a></td><td class="diff_header" id="to36_100">100</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return<span class="diff_add">&nbsp;false</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_178">178</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;}</td><td class="diff_next"></td><td class="diff_header" id="to36_101">101</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;}</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_179">179</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_102">102</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__8">n</a></td><td class="diff_header" id="from36_180">180</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;__BeginBlur();</span></td><td class="diff_next"><a href="#difflib_chg_to36__8">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_181">181</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_182">182</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;DWORD&nbsp;dwParticleCount&nbsp;=&nbsp;std::min(<span class="diff_chg">(</span>size_t<span class="diff_chg">)</span>m_dwParticleMaxNum,&nbsp;m_kVct_pkParticleSnow.size());</td><td class="diff_next"></td><td class="diff_header" id="to36_103">103</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">const&nbsp;</span>DWORD&nbsp;dwParticleCount&nbsp;=&nbsp;<span class="diff_add">static_cast&lt;DWORD&gt;((</span>std::min<span class="diff_add">)</span>(<span class="diff_chg">static_cast&lt;</span>size_t<span class="diff_chg">&gt;(</span>m_dwParticleMaxN</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap">um<span class="diff_add">)</span>,&nbsp;m_kVct_pkParticleSnow.size())<span class="diff_add">)</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_104">104</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!dwParticleCount&nbsp;||&nbsp;!m_pVB&nbsp;||&nbsp;!m_pIB&nbsp;||&nbsp;!m_pImageInstance&nbsp;||&nbsp;m_pImageInstance-&gt;IsEmpty())&nbsp;re</span></td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__8"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_add">turn&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_105">105</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!m_pImageInstance-&gt;GetGraphicImagePointer()-&gt;GetTextureReference().GetD3DTexture())&nbsp;return&nbsp;f</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_add">alse;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_183">183</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_106">106</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_184">184</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;CCamera&nbsp;*&nbsp;pCamera&nbsp;=&nbsp;CCameraManager::Instance().GetCurrentCamera();</td><td class="diff_next"></td><td class="diff_header" id="to36_107">107</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;CCamera&nbsp;*&nbsp;pCamera&nbsp;=&nbsp;CCameraManager::Instance().GetCurrentCamera();</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__9"></td><td class="diff_header" id="from36_185">185</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!pCamera)</td><td class="diff_next"></td><td class="diff_header" id="to36_108">108</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!pCamera)</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__9">n</a></td><td class="diff_header" id="from36_186">186</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;</td><td class="diff_next"><a href="#difflib_chg_to36__9">n</a></td><td class="diff_header" id="to36_109">109</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return<span class="diff_add">&nbsp;false</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_187">187</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_110">110</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_188">188</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;D3DXVECTOR3&nbsp;&amp;&nbsp;c_rv3Up&nbsp;=&nbsp;pCamera-&gt;GetUp();</td><td class="diff_next"></td><td class="diff_header" id="to36_111">111</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;D3DXVECTOR3&nbsp;&amp;&nbsp;c_rv3Up&nbsp;=&nbsp;pCamera-&gt;GetUp();</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_189">189</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;D3DXVECTOR3&nbsp;&amp;&nbsp;c_rv3Cross&nbsp;=&nbsp;pCamera-&gt;GetCross();</td><td class="diff_next"></td><td class="diff_header" id="to36_112">112</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;D3DXVECTOR3&nbsp;&amp;&nbsp;c_rv3Cross&nbsp;=&nbsp;pCamera-&gt;GetCross();</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_190">190</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_113">113</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__10">n</a></td><td class="diff_header" id="from36_191">191</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;SParticleVertex&nbsp;*&nbsp;pv3Verticies;</td><td class="diff_next"><a href="#difflib_chg_to36__10">n</a></td><td class="diff_header" id="to36_114">114</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;SParticleVertex&nbsp;*&nbsp;pv3Verticies<span class="diff_add">&nbsp;=&nbsp;nullptr</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_192">192</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(<span class="diff_chg">S</span>U<span class="diff_chg">CCEEDED</span>(m_pVB<span class="diff_sub">-&gt;Lock(0</span>,&nbsp;sizeof(SParticleVertex)*dwParticleCount*4,&nbsp;(void<span class="diff_sub">&nbsp;</span>**)<span class="diff_sub">&nbsp;</span>&amp;pv3Verticies,</td><td class="diff_next"></td><td class="diff_header" id="to36_115">115</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(<span class="diff_chg">GeometryBuffer</span>U<span class="diff_chg">pload::Lock</span>(m_pVB,&nbsp;sizeof(SParticleVertex)*dwParticleCount*4,&nbsp;(void**)&amp;pv3Ver</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap">&nbsp;D3DLOCK_DISCARD))<span class="diff_sub">)</span></td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap">ticies,&nbsp;D3DLOCK_DISCARD))</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_193">193</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;{</td><td class="diff_next"></td><td class="diff_header" id="to36_116">116</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;{</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_194">194</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;i&nbsp;=&nbsp;0;</td><td class="diff_next"></td><td class="diff_header" id="to36_117">117</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;i&nbsp;=&nbsp;0;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_195">195</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::vector&lt;CSnowParticle*&gt;::iterator&nbsp;itor&nbsp;=&nbsp;m_kVct_pkParticleSnow.begin();</td><td class="diff_next"></td><td class="diff_header" id="to36_118">118</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::vector&lt;CSnowParticle*&gt;::iterator&nbsp;itor&nbsp;=&nbsp;m_kVct_pkParticleSnow.begin();</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_196">196</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(;&nbsp;i&nbsp;&lt;&nbsp;dwParticleCount&nbsp;&amp;&amp;&nbsp;itor&nbsp;!=&nbsp;m_kVct_pkParticleSnow.end();&nbsp;++i,&nbsp;++itor)</td><td class="diff_next"></td><td class="diff_header" id="to36_119">119</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(;&nbsp;i&nbsp;&lt;&nbsp;dwParticleCount&nbsp;&amp;&amp;&nbsp;itor&nbsp;!=&nbsp;m_kVct_pkParticleSnow.end();&nbsp;++i,&nbsp;++itor)</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_197">197</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td><td class="diff_next"></td><td class="diff_header" id="to36_120">120</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_198">198</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CSnowParticle&nbsp;*&nbsp;pSnow&nbsp;=&nbsp;*itor;</td><td class="diff_next"></td><td class="diff_header" id="to36_121">121</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CSnowParticle&nbsp;*&nbsp;pSnow&nbsp;=&nbsp;*itor;</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__10"></td><td class="diff_header" id="from36_199">199</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pSnow-&gt;SetCameraVertex(c_rv3Up,&nbsp;c_rv3Cross);</td><td class="diff_next"></td><td class="diff_header" id="to36_122">122</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pSnow-&gt;SetCameraVertex(c_rv3Up,&nbsp;c_rv3Cross);</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_200">200</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pSnow-&gt;GetVerticies(pv3Verticies[i*4+0],</td><td class="diff_next"></td><td class="diff_header" id="to36_123">123</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pSnow-&gt;GetVerticies(pv3Verticies[i*4+0],</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_201">201</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv3Verticies[i*4+1],</td><td class="diff_next"></td><td class="diff_header" id="to36_124">124</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv3Verticies[i*4+1],</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_202">202</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv3Verticies[i*4+2],</td><td class="diff_next"></td><td class="diff_header" id="to36_125">125</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv3Verticies[i*4+2],</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_203">203</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv3Verticies[i*4+3]);</td><td class="diff_next"></td><td class="diff_header" id="to36_126">126</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pv3Verticies[i*4+3]);</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_204">204</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td><td class="diff_next"></td><td class="diff_header" id="to36_127">127</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__11">n</a></td><td class="diff_header" id="from36_205">205</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_pVB-&gt;Unlock();</span></td><td class="diff_next"><a href="#difflib_chg_to36__11">n</a></td><td class="diff_header" id="to36_128">128</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(m_pVB-&gt;Unlock()))&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_129">129</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;}</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_130">130</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;return&nbsp;false;&nbsp;//&nbsp;Never&nbsp;draw&nbsp;stale&nbsp;geometry&nbsp;after&nbsp;a&nbsp;failed&nbsp;upload.</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_131">131</td><td nowrap="nowrap"><span class="diff_add">&nbsp;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_132">132</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;CStateManager::ScopedState&nbsp;drawingState(STATEMANAGER);</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_133">133</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!drawingState.IsValid())&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_134">134</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;CRenderTargetBinding&nbsp;blurTarget;&nbsp;//&nbsp;Restores&nbsp;before&nbsp;drawingState&nbsp;on&nbsp;every&nbsp;exit.</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_135">135</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;D3DVIEWPORT9&nbsp;originalViewport&nbsp;=&nbsp;{};</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_136">136</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(m_bBlurEnable)</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_206">206</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_chg">}</span></td><td class="diff_next"></td><td class="diff_header" id="to36_137">137</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_chg">{</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_138">138</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!m_lpSnowTexture&nbsp;||&nbsp;!m_lpSnowRenderTargetSurface&nbsp;||&nbsp;!m_lpSnowDepthSurface)&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_139">139</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(ms_lpd3dDevice-&gt;GetViewport(&amp;originalViewport)))&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_140">140</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;D3DVIEWPORT9&nbsp;viewport&nbsp;=&nbsp;{0,&nbsp;0,&nbsp;m_wBlurTextureSize,&nbsp;m_wBlurTextureSize,&nbsp;0.0f,&nbsp;1.0f};</span></td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__11"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_141">141</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(blurTarget.Bind(ms_lpd3dDevice,&nbsp;m_lpSnowRenderTargetSurface,&nbsp;m_lpSnowDepthSurface</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_add">,&nbsp;viewport)))&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_142">142</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(ms_lpd3dDevice-&gt;Clear(0,&nbsp;nullptr,&nbsp;D3DCLEAR_TARGET&nbsp;|&nbsp;D3DCLEAR_ZBUFFER,&nbsp;0,&nbsp;1.0f,&nbsp;0)</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_add">))&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_143">143</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;}</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_207">207</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_144">144</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__12">n</a></td><td class="diff_header" id="from36_208">208</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.S<span class="diff_sub">av</span>eRenderState(D3DRS_ZWRITEENABLE,&nbsp;FALSE);</td><td class="diff_next"><a href="#difflib_chg_to36__12">n</a></td><td class="diff_header" id="to36_145">145</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">if&nbsp;(FAILED(</span>STATEMANAGER.Se<span class="diff_add">t</span>RenderState(D3DRS_ZWRITEENABLE,&nbsp;FALSE)<span class="diff_add">))&nbsp;return&nbsp;false</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_209">209</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.S<span class="diff_sub">av</span>eRenderState(D3DRS_ALPHABLENDENABLE,&nbsp;TRUE);</td><td class="diff_next"></td><td class="diff_header" id="to36_146">146</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">if&nbsp;(FAILED(</span>STATEMANAGER.Se<span class="diff_add">t</span>RenderState(D3DRS_ALPHABLENDENABLE,&nbsp;TRUE)<span class="diff_add">))&nbsp;return&nbsp;false</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_210">210</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.S<span class="diff_sub">av</span>eRenderState(D3DRS_CULLMODE,&nbsp;D3DCULL_NONE);</td><td class="diff_next"></td><td class="diff_header" id="to36_147">147</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">if&nbsp;(FAILED(</span>STATEMANAGER.Se<span class="diff_add">t</span>RenderState(D3DRS_CULLMODE,&nbsp;D3DCULL_NONE)<span class="diff_add">))&nbsp;return&nbsp;false</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_211">211</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetRenderState(D3DRS_SRCBLEND,&nbsp;&nbsp;D3DBLEND_SRCALPHA);</td><td class="diff_next"></td><td class="diff_header" id="to36_148">148</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">if&nbsp;(FAILED(</span>STATEMANAGER.SetRenderState(D3DRS_SRCBLEND,&nbsp;&nbsp;D3DBLEND_SRCALPHA)<span class="diff_add">))&nbsp;return&nbsp;false</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_212">212</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetRenderState(D3DRS_DESTBLEND,&nbsp;D3DBLEND_INVSRCALPHA);</td><td class="diff_next"></td><td class="diff_header" id="to36_149">149</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">if&nbsp;(FAILED(</span>STATEMANAGER.SetRenderState(D3DRS_DESTBLEND,&nbsp;D3DBLEND_INVSRCALPHA)<span class="diff_add">))&nbsp;return&nbsp;false</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_213">213</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTextureStageState(0,&nbsp;D3DTSS_COLORARG1,&nbsp;D3DTA_TEXTURE);</td><td class="diff_next"></td><td class="diff_header" id="to36_150">150</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">if&nbsp;(FAILED(</span>STATEMANAGER.SetTextureStageState(0,&nbsp;D3DTSS_COLORARG1,&nbsp;D3DTA_TEXTURE)<span class="diff_add">))&nbsp;return&nbsp;false</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_214">214</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTextureStageState(0,&nbsp;D3DTSS_COLOROP,&nbsp;D3DTOP_SELECTARG1);</td><td class="diff_next"></td><td class="diff_header" id="to36_151">151</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">if&nbsp;(FAILED(</span>STATEMANAGER.SetTextureStageState(0,&nbsp;D3DTSS_COLOROP,&nbsp;D3DTOP_SELECTARG1)<span class="diff_add">))&nbsp;return&nbsp;fals</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_add">e</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_215">215</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTextureStageState(0,&nbsp;D3DTSS_ALPHAARG1,&nbsp;D3DTA_TEXTURE);</td><td class="diff_next"></td><td class="diff_header" id="to36_152">152</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">if&nbsp;(FAILED(</span>STATEMANAGER.SetTextureStageState(0,&nbsp;D3DTSS_ALPHAARG1,&nbsp;D3DTA_TEXTURE)<span class="diff_add">))&nbsp;return&nbsp;false</span>;</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__12"></td><td class="diff_header" id="from36_216">216</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTextureStageState(0,&nbsp;D3DTSS_ALPHAOP,&nbsp;D3DTOP_SELECTARG1);</td><td class="diff_next"></td><td class="diff_header" id="to36_153">153</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">if&nbsp;(FAILED(</span>STATEMANAGER.SetTextureStageState(0,&nbsp;D3DTSS_ALPHAOP,&nbsp;D3DTOP_SELECTARG1)<span class="diff_add">))&nbsp;return&nbsp;fals</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_add">e</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_217">217</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTexture(1,&nbsp;NULL);</span></td><td class="diff_next"></td><td class="diff_header" id="to36_154">154</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(STATEMANAGER.SetTexture(1,&nbsp;NULL)))&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_218">218</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTextureStageState(1,&nbsp;D3DTSS_COLOROP,&nbsp;D3DTOP_DISABLE);</td><td class="diff_next"></td><td class="diff_header" id="to36_155">155</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">if&nbsp;(FAILED(</span>STATEMANAGER.SetTextureStageState(1,&nbsp;D3DTSS_COLOROP,&nbsp;D3DTOP_DISABLE)<span class="diff_add">))&nbsp;return&nbsp;false</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_219">219</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetTextureStageState(1,&nbsp;D3DTSS_ALPHAOP,&nbsp;D3DTOP_DISABLE);</td><td class="diff_next"></td><td class="diff_header" id="to36_156">156</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">if&nbsp;(FAILED(</span>STATEMANAGER.SetTextureStageState(1,&nbsp;D3DTSS_ALPHAOP,&nbsp;D3DTOP_DISABLE)<span class="diff_add">))&nbsp;return&nbsp;false</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_220">220</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_157">157</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__13">n</a></td><td class="diff_header" id="from36_221">221</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;m_pImageInstance-&gt;GetGraphicImagePointer()-&gt;GetTextureReference().SetTextureStage(0);</span></td><td class="diff_next"><a href="#difflib_chg_to36__13">n</a></td><td class="diff_header" id="to36_158">158</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(STATEMANAGER.SetTexture(0,&nbsp;m_pImageInstance-&gt;GetGraphicImagePointer()-&gt;GetTextureRefe</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_add">rence().GetD3DTexture())))&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_222">222</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetIndices(m_pIB,&nbsp;0);</span></td><td class="diff_next"></td><td class="diff_header" id="to36_159">159</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(STATEMANAGER.SetIndices(m_pIB,&nbsp;0)))&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_223">223</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetStreamSource(0,&nbsp;m_pVB,&nbsp;sizeof(SParticleVertex));</td><td class="diff_next"></td><td class="diff_header" id="to36_160">160</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">if&nbsp;(FAILED(</span>STATEMANAGER.SetStreamSource(0,&nbsp;m_pVB,&nbsp;sizeof(SParticleVertex))<span class="diff_add">))&nbsp;return&nbsp;false</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_224">224</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.SetFVF(D3DFVF_XYZ&nbsp;|&nbsp;D3DFVF_TEX1);</td><td class="diff_next"></td><td class="diff_header" id="to36_161">161</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">if&nbsp;(FAILED(</span>STATEMANAGER.SetFVF(D3DFVF_XYZ&nbsp;|&nbsp;D3DFVF_TEX1)<span class="diff_add">))&nbsp;return&nbsp;false</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_225">225</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.DrawIndexedPrimitive(D3DPT_TRIANGLELIST,&nbsp;0,&nbsp;dwParticleCount*4,&nbsp;0,&nbsp;dwParticleCount*2</td><td class="diff_next"></td><td class="diff_header" id="to36_162">162</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;<span class="diff_add">if&nbsp;(FAILED(</span>STATEMANAGER.DrawIndexedPrimitive(D3DPT_TRIANGLELIST,&nbsp;0,&nbsp;dwParticleCount*4,&nbsp;0,&nbsp;dwPart</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap">);</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap">icleCount*2)<span class="diff_add">))&nbsp;return&nbsp;false</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_226">226</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.RestoreRenderState(D3DRS_ALPHABLENDENABLE);</span></td><td class="diff_next"></td><td class="diff_header" id="to36_163">163</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(m_bBlurEnable)</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_227">227</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.RestoreRenderState(D3DRS_ZWRITEENABLE);</span></td><td class="diff_next"></td><td class="diff_header" id="to36_164">164</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;{</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_228">228</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;STATEMANAGER.RestoreRenderState(D3DRS_CULLMODE);</span></td><td class="diff_next"></td><td class="diff_header" id="to36_165">165</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(blurTarget.Restore()))&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_229">229</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header" id="to36_166">166</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(STATEMANAGER.SetTexture(0,&nbsp;m_lpSnowTexture)))&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_230">230</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;__ApplyBlur();</span></td><td class="diff_next"></td><td class="diff_header" id="to36_167">167</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;float&nbsp;x&nbsp;=&nbsp;static_cast&lt;float&gt;(originalViewport.X),&nbsp;y&nbsp;=&nbsp;static_cast&lt;float&gt;(originalViewp</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_add">ort.Y);</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_168">168</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;float&nbsp;right&nbsp;=&nbsp;x&nbsp;+&nbsp;originalViewport.Width,&nbsp;bottom&nbsp;=&nbsp;y&nbsp;+&nbsp;originalViewport.Height;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_169">169</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex&nbsp;vertices[4]&nbsp;=&nbsp;{</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_170">170</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex(D3DXVECTOR3(x,y,0),1,0xFFFFFF,0,0),</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_171">171</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex(D3DXVECTOR3(right,y,0),1,0xFFFFFF,1,0),</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_172">172</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex(D3DXVECTOR3(x,bottom,0),1,0xFFFFFF,0,1),</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_173">173</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlurVertex(D3DXVECTOR3(right,bottom,0),1,0xFFFFFF,1,1)};</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_174">174</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(STATEMANAGER.SetFVF(D3DFVF_XYZRHW&nbsp;|&nbsp;D3DFVF_DIFFUSE&nbsp;|&nbsp;D3DFVF_TEX1)))&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_175">175</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(STATEMANAGER.DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,&nbsp;2,&nbsp;vertices,&nbsp;sizeof(BlurVertex)</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_add">)))&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_176">176</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;}</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_177">177</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;SUCCEEDED(drawingState.Restore());</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_231">231</td><td nowrap="nowrap">}</td><td class="diff_next"></td><td class="diff_header" id="to36_178">178</td><td nowrap="nowrap">}</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_232">232</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_179">179</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_233">233</td><td nowrap="nowrap">bool&nbsp;CSnowEnvironment::__CreateBlurTexture()</td><td class="diff_next"></td><td class="diff_header" id="to36_180">180</td><td nowrap="nowrap">bool&nbsp;CSnowEnvironment::__CreateBlurTexture()</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_234">234</td><td nowrap="nowrap">{</td><td class="diff_next"></td><td class="diff_header" id="to36_181">181</td><td nowrap="nowrap">{</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_235">235</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!m_bBlurEnable)</td><td class="diff_next"></td><td class="diff_header" id="to36_182">182</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!m_bBlurEnable)</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_236">236</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;true;</td><td class="diff_next"></td><td class="diff_header" id="to36_183">183</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;true;</td></tr>
+        </tbody>        
+        <tbody>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_239">239</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td><td class="diff_next"></td><td class="diff_header" id="to36_186">186</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__13"></td><td class="diff_header" id="from36_240">240</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(m_lpSnowTexture-&gt;GetSurfaceLevel(0,&nbsp;&amp;m_lpSnowRenderTargetSurface)))</td><td class="diff_next"></td><td class="diff_header" id="to36_187">187</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(m_lpSnowTexture-&gt;GetSurfaceLevel(0,&nbsp;&amp;m_lpSnowRenderTargetSurface)))</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_241">241</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td><td class="diff_next"></td><td class="diff_header" id="to36_188">188</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_242">242</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(ms_lpd3dDevice-&gt;CreateDepthStencilSurface(m_wBlurTextureSize,&nbsp;m_wBlurTextureSize,&nbsp;D3D</td><td class="diff_next"></td><td class="diff_header" id="to36_189">189</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(ms_lpd3dDevice-&gt;CreateDepthStencilSurface(m_wBlurTextureSize,&nbsp;m_wBlurTextureSize,&nbsp;D3D</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap">FMT_D16,&nbsp;D3DMULTISAMPLE_NONE,&nbsp;0,&nbsp;TRUE,&nbsp;&amp;m_lpSnowDepthSurface,&nbsp;nullptr)))</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap">FMT_D16,&nbsp;D3DMULTISAMPLE_NONE,&nbsp;0,&nbsp;TRUE,&nbsp;&amp;m_lpSnowDepthSurface,&nbsp;nullptr)))</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_243">243</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td><td class="diff_next"></td><td class="diff_header" id="to36_190">190</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_244">244</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_191">191</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__14">n</a></td><td class="diff_header" id="from36_245">245</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(ms_lpd3dDevice-&gt;CreateTexture(m_wBlurTextureSize,&nbsp;m_wBlurTextureSize,&nbsp;1,&nbsp;D3DUSAGE_REN</span></td><td class="diff_next"><a href="#difflib_chg_to36__14">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_sub">DERTARGET,&nbsp;D3DFMT_X8R8G8B8,&nbsp;D3DPOOL_DEFAULT,&nbsp;&amp;m_lpAccumTexture,&nbsp;nullptr)))</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_246">246</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_247">247</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(m_lpAccumTexture-&gt;GetSurfaceLevel(0,&nbsp;&amp;m_lpAccumRenderTargetSurface)))</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_248">248</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_249">249</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(ms_lpd3dDevice-&gt;CreateDepthStencilSurface(m_wBlurTextureSize,&nbsp;m_wBlurTextureSize,&nbsp;D3D</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_sub">FMT_D16,&nbsp;D3DMULTISAMPLE_NONE,&nbsp;0,&nbsp;TRUE,&nbsp;&amp;m_lpAccumDepthSurface,&nbsp;nullptr)))</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_250">250</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__14"></td><td class="diff_header" id="from36_251">251</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_252">252</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;true;</td><td class="diff_next"></td><td class="diff_header" id="to36_192">192</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;true;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_253">253</td><td nowrap="nowrap">}</td><td class="diff_next"></td><td class="diff_header" id="to36_193">193</td><td nowrap="nowrap">}</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_254">254</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_194">194</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_255">255</td><td nowrap="nowrap">bool&nbsp;CSnowEnvironment::__CreateGeometry()</td><td class="diff_next"></td><td class="diff_header" id="to36_195">195</td><td nowrap="nowrap">bool&nbsp;CSnowEnvironment::__CreateGeometry()</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_256">256</td><td nowrap="nowrap">{</td><td class="diff_next"></td><td class="diff_header" id="to36_196">196</td><td nowrap="nowrap">{</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__15">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"><a href="#difflib_chg_to36__15">n</a></td><td class="diff_header" id="to36_197">197</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!ms_lpd3dDevice&nbsp;||&nbsp;m_pVB&nbsp;||&nbsp;m_pIB&nbsp;||&nbsp;!m_dwParticleMaxNum&nbsp;||&nbsp;m_dwParticleMaxNum&nbsp;&gt;&nbsp;16384)&nbsp;retu</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap"><span class="diff_add">rn&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_257">257</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(ms_lpd3dDevice-&gt;CreateVertexBuffer(sizeof(SParticleVertex)&nbsp;*&nbsp;m_dwParticleMaxNum&nbsp;*&nbsp;4,</td><td class="diff_next"></td><td class="diff_header" id="to36_198">198</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(FAILED(ms_lpd3dDevice-&gt;CreateVertexBuffer(sizeof(SParticleVertex)&nbsp;*&nbsp;m_dwParticleMaxNum&nbsp;*&nbsp;4,</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_258">258</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DUSAGE_DYNAMIC&nbsp;|&nbsp;D3DUSAGE_WRITEONLY,</td><td class="diff_next"></td><td class="diff_header" id="to36_199">199</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DUSAGE_DYNAMIC&nbsp;|&nbsp;D3DUSAGE_WRITEONLY,</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_259">259</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DFVF_XYZ&nbsp;|&nbsp;D3DFVF_TEX1,</td><td class="diff_next"></td><td class="diff_header" id="to36_200">200</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DFVF_XYZ&nbsp;|&nbsp;D3DFVF_TEX1,</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_260">260</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DPOOL_DEFAULT,</td><td class="diff_next"></td><td class="diff_header" id="to36_201">201</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DPOOL_DEFAULT,</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_261">261</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;m_pVB,&nbsp;nullptr)))</td><td class="diff_next"></td><td class="diff_header" id="to36_202">202</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;m_pVB,&nbsp;nullptr)))</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_262">262</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td><td class="diff_next"></td><td class="diff_header" id="to36_203">203</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td></tr>
+        </tbody>        
+        <tbody>
+            <tr><td class="diff_next" id="difflib_chg_to36__15"></td><td class="diff_header" id="from36_265">265</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DUSAGE_DYNAMIC,</td><td class="diff_next"></td><td class="diff_header" id="to36_206">206</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DUSAGE_DYNAMIC,</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_266">266</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DFMT_INDEX16,</td><td class="diff_next"></td><td class="diff_header" id="to36_207">207</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DFMT_INDEX16,</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_267">267</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DPOOL_DEFAULT,</td><td class="diff_next"></td><td class="diff_header" id="to36_208">208</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DPOOL_DEFAULT,</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_268">268</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;m_pIB,&nbsp;nullptr)))</td><td class="diff_next"></td><td class="diff_header" id="to36_209">209</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;m_pIB,&nbsp;nullptr)))</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_269">269</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td><td class="diff_next"></td><td class="diff_header" id="to36_210">210</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_270">270</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_211">211</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__16">n</a></td><td class="diff_header" id="from36_271">271</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;WORD*&nbsp;dstIndices;</td><td class="diff_next"><a href="#difflib_chg_to36__16">n</a></td><td class="diff_header" id="to36_212">212</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;WORD*&nbsp;dstIndices<span class="diff_add">&nbsp;=&nbsp;nullptr</span>;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_272">272</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(<span class="diff_chg">FAI</span>L<span class="diff_chg">ED</span>(m_pIB<span class="diff_sub">-&gt;Lock(0</span>,&nbsp;sizeof(WORD)&nbsp;*&nbsp;m_dwParticleMaxNum&nbsp;*&nbsp;6,&nbsp;(void**)&amp;dstIndices<span class="diff_sub">,&nbsp;0</span>))<span class="diff_sub">)</span></td><td class="diff_next"></td><td class="diff_header" id="to36_213">213</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(<span class="diff_chg">!GeometryBufferUpload::</span>L<span class="diff_chg">ock</span>(m_pIB,&nbsp;sizeof(WORD)&nbsp;*&nbsp;m_dwParticleMaxNum&nbsp;*&nbsp;6,&nbsp;(void**)&amp;dstIndice</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap">&nbsp;</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap">s))</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_273">273</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td><td class="diff_next"></td><td class="diff_header" id="to36_214">214</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_274">274</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_215">215</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_275">275</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;WORD&nbsp;c_awFillRectIndices[6]&nbsp;=&nbsp;{&nbsp;0,&nbsp;2,&nbsp;1,&nbsp;2,&nbsp;3,&nbsp;1,&nbsp;};</td><td class="diff_next"></td><td class="diff_header" id="to36_216">216</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;WORD&nbsp;c_awFillRectIndices[6]&nbsp;=&nbsp;{&nbsp;0,&nbsp;2,&nbsp;1,&nbsp;2,&nbsp;3,&nbsp;1,&nbsp;};</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_276">276</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(int&nbsp;i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;m_dwParticleMaxNum;&nbsp;++i)</td><td class="diff_next"></td><td class="diff_header" id="to36_217">217</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(int&nbsp;i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;m_dwParticleMaxNum;&nbsp;++i)</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_277">277</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;{</td><td class="diff_next"></td><td class="diff_header" id="to36_218">218</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;{</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__16"></td><td class="diff_header" id="from36_278">278</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(int&nbsp;j&nbsp;=&nbsp;0;&nbsp;j&nbsp;&lt;&nbsp;6;&nbsp;++j)</td><td class="diff_next"></td><td class="diff_header" id="to36_219">219</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(int&nbsp;j&nbsp;=&nbsp;0;&nbsp;j&nbsp;&lt;&nbsp;6;&nbsp;++j)</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_279">279</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td><td class="diff_next"></td><td class="diff_header" id="to36_220">220</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_280">280</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dstIndices[i*6&nbsp;+&nbsp;j]&nbsp;=&nbsp;i*4&nbsp;+&nbsp;c_awFillRectIndices[j];</td><td class="diff_next"></td><td class="diff_header" id="to36_221">221</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dstIndices[i*6&nbsp;+&nbsp;j]&nbsp;=&nbsp;i*4&nbsp;+&nbsp;c_awFillRectIndices[j];</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_281">281</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td><td class="diff_next"></td><td class="diff_header" id="to36_222">222</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_282">282</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;}</td><td class="diff_next"></td><td class="diff_header" id="to36_223">223</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;}</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_283">283</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_224">224</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__17">n</a></td><td class="diff_header" id="from36_284">284</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;m_pIB-&gt;Unlock();</span></td><td class="diff_next"><a href="#difflib_chg_to36__17">n</a></td><td class="diff_header" id="to36_225">225</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;SUCCEEDED(m_pIB-&gt;Unlock());</span></td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__17"></td><td class="diff_header" id="from36_285">285</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;true;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_286">286</td><td nowrap="nowrap">}</td><td class="diff_next"></td><td class="diff_header" id="to36_226">226</td><td nowrap="nowrap">}</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_287">287</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_227">227</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_288">288</td><td nowrap="nowrap">bool&nbsp;CSnowEnvironment::Create()</td><td class="diff_next"></td><td class="diff_header" id="to36_228">228</td><td nowrap="nowrap">bool&nbsp;CSnowEnvironment::Create()</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_289">289</td><td nowrap="nowrap">{</td><td class="diff_next"></td><td class="diff_header" id="to36_229">229</td><td nowrap="nowrap">{</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_290">290</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;Destroy();</td><td class="diff_next"></td><td class="diff_header" id="to36_230">230</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;Destroy();</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__18">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"><a href="#difflib_chg_to36__18">n</a></td><td class="diff_header" id="to36_231">231</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;auto&nbsp;cleanup&nbsp;=&nbsp;[this]()&nbsp;{&nbsp;Destroy();&nbsp;};</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_232">232</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;GraphicsStartup::Rollback&lt;decltype(cleanup)&gt;&nbsp;rollback(cleanup);</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_233">233</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!ms_lpd3dDevice)&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_291">291</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_234">234</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__18"></td><td class="diff_header" id="from36_292">292</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!__CreateBlurTexture())</td><td class="diff_next"></td><td class="diff_header" id="to36_235">235</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!__CreateBlurTexture())</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_293">293</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td><td class="diff_next"></td><td class="diff_header" id="to36_236">236</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_294">294</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_237">237</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_295">295</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!__CreateGeometry())</td><td class="diff_next"></td><td class="diff_header" id="to36_238">238</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!__CreateGeometry())</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_296">296</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td><td class="diff_next"></td><td class="diff_header" id="to36_239">239</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__19"></td><td class="diff_header" id="from36_297">297</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_240">240</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__19">n</a></td><td class="diff_header" id="from36_298">298</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;C<span class="diff_chg">G</span>r<span class="diff_sub">aphi</span>c<span class="diff_sub">Imag</span>e<span class="diff_sub">&nbsp;</span>*&nbsp;<span class="diff_chg">pImag</span>e&nbsp;=&nbsp;<span class="diff_sub">(CGraphicImage&nbsp;*)</span>CResourceManager::Instance().GetResourcePointer("d:/ym</td><td class="diff_next"><a href="#difflib_chg_to36__19">n</a></td><td class="diff_header" id="to36_241">241</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;C<span class="diff_chg">Resou</span>rce*&nbsp;<span class="diff_chg">r</span>e<span class="diff_add">source</span>&nbsp;=&nbsp;CResourceManager::Instance().GetResourcePointer("d:/ymir&nbsp;work/special/snow</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__20"></td><td class="diff_header">></td><td nowrap="nowrap">ir&nbsp;work/special/snow.dds");</td><td class="diff_next"></td><td class="diff_header">></td><td nowrap="nowrap">.dds");</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_242">242</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!resource&nbsp;||&nbsp;!resource-&gt;IsType(CGraphicImage::Type()))&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_243">243</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;CGraphicImage*&nbsp;pImage&nbsp;=&nbsp;static_cast&lt;CGraphicImage*&gt;(resource);</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_299">299</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_pImageInstance&nbsp;=&nbsp;CGraphicImageInstance::New();</td><td class="diff_next"></td><td class="diff_header" id="to36_244">244</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_pImageInstance&nbsp;=&nbsp;CGraphicImageInstance::New();</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__20">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"><a href="#difflib_chg_to36__20">n</a></td><td class="diff_header" id="to36_245">245</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!m_pImageInstance)&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_300">300</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_pImageInstance-&gt;SetImagePointer(pImage);</td><td class="diff_next"></td><td class="diff_header" id="to36_246">246</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_pImageInstance-&gt;SetImagePointer(pImage);</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__21">n</a></td><td class="diff_header" id="from36_301">301</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"><a href="#difflib_chg_to36__21">n</a></td><td class="diff_header" id="to36_247">247</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(m_pImageInstance-&gt;IsEmpty()&nbsp;||&nbsp;!pImage-&gt;GetTextureReference().GetD3DTexture())&nbsp;return&nbsp;false;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_248">248</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;rollback.Complete();</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_302">302</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;true;</td><td class="diff_next"></td><td class="diff_header" id="to36_249">249</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;true;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_303">303</td><td nowrap="nowrap">}</td><td class="diff_next"></td><td class="diff_header" id="to36_250">250</td><td nowrap="nowrap">}</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__21"></td><td class="diff_header" id="from36_304">304</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_251">251</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_305">305</td><td nowrap="nowrap">void&nbsp;CSnowEnvironment::Destroy()</td><td class="diff_next"></td><td class="diff_header" id="to36_252">252</td><td nowrap="nowrap">void&nbsp;CSnowEnvironment::Destroy()</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_306">306</td><td nowrap="nowrap">{</td><td class="diff_next"></td><td class="diff_header" id="to36_253">253</td><td nowrap="nowrap">{</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_307">307</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(m_lpSnowTexture);</td><td class="diff_next"></td><td class="diff_header" id="to36_254">254</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(m_lpSnowTexture);</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_308">308</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(m_lpSnowRenderTargetSurface);</td><td class="diff_next"></td><td class="diff_header" id="to36_255">255</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(m_lpSnowRenderTargetSurface);</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_309">309</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(m_lpSnowDepthSurface);</td><td class="diff_next"></td><td class="diff_header" id="to36_256">256</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(m_lpSnowDepthSurface);</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__22">n</a></td><td class="diff_header" id="from36_310">310</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(m_lpAccumTexture);</span></td><td class="diff_next"><a href="#difflib_chg_to36__22">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_311">311</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(m_lpAccumRenderTargetSurface);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_312">312</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(m_lpAccumDepthSurface);</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_313">313</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(m_pVB);</td><td class="diff_next"></td><td class="diff_header" id="to36_257">257</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(m_pVB);</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_314">314</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(m_pIB);</td><td class="diff_next"></td><td class="diff_header" id="to36_258">258</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(m_pIB);</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_315">315</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_259">259</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_316">316</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;stl_wipe(m_kVct_pkParticleSnow);</td><td class="diff_next"></td><td class="diff_header" id="to36_260">260</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;stl_wipe(m_kVct_pkParticleSnow);</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_317">317</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;CSnowParticle::DestroyPool();</td><td class="diff_next"></td><td class="diff_header" id="to36_261">261</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;CSnowParticle::DestroyPool();</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_318">318</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_262">262</td><td nowrap="nowrap"></td></tr>
+        </tbody>        
+        <tbody>
+            <tr><td class="diff_next" id="difflib_chg_to36__22"></td><td class="diff_header" id="from36_325">325</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;__Initialize();</td><td class="diff_next"></td><td class="diff_header" id="to36_269">269</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;__Initialize();</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_326">326</td><td nowrap="nowrap">}</td><td class="diff_next"></td><td class="diff_header" id="to36_270">270</td><td nowrap="nowrap">}</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_327">327</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_271">271</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_328">328</td><td nowrap="nowrap">void&nbsp;CSnowEnvironment::__Initialize()</td><td class="diff_next"></td><td class="diff_header" id="to36_272">272</td><td nowrap="nowrap">void&nbsp;CSnowEnvironment::__Initialize()</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to36__23"></td><td class="diff_header" id="from36_329">329</td><td nowrap="nowrap">{</td><td class="diff_next"></td><td class="diff_header" id="to36_273">273</td><td nowrap="nowrap">{</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_330">330</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_bSnowEnable&nbsp;=&nbsp;FALSE;</td><td class="diff_next"></td><td class="diff_header" id="to36_274">274</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_bSnowEnable&nbsp;=&nbsp;FALSE;</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__23">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"><a href="#difflib_chg_to36__23">n</a></td><td class="diff_header" id="to36_275">275</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;m_v3Center&nbsp;=&nbsp;D3DXVECTOR3(0,&nbsp;0,&nbsp;0);</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_331">331</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_lpSnowTexture&nbsp;=&nbsp;NULL;</td><td class="diff_next"></td><td class="diff_header" id="to36_276">276</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_lpSnowTexture&nbsp;=&nbsp;NULL;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_332">332</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_lpSnowRenderTargetSurface&nbsp;=&nbsp;NULL;</td><td class="diff_next"></td><td class="diff_header" id="to36_277">277</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_lpSnowRenderTargetSurface&nbsp;=&nbsp;NULL;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_333">333</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_lpSnowDepthSurface&nbsp;=&nbsp;NULL;</td><td class="diff_next"></td><td class="diff_header" id="to36_278">278</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_lpSnowDepthSurface&nbsp;=&nbsp;NULL;</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to36__top">t</a></td><td class="diff_header" id="from36_334">334</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;m_lpAccumTexture&nbsp;=&nbsp;NULL;</span></td><td class="diff_next"><a href="#difflib_chg_to36__top">t</a></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_335">335</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;m_lpAccumRenderTargetSurface&nbsp;=&nbsp;NULL;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_336">336</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;m_lpAccumDepthSurface&nbsp;=&nbsp;NULL;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_337">337</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_pVB&nbsp;=&nbsp;NULL;</td><td class="diff_next"></td><td class="diff_header" id="to36_279">279</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_pVB&nbsp;=&nbsp;NULL;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_338">338</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_pIB&nbsp;=&nbsp;NULL;</td><td class="diff_next"></td><td class="diff_header" id="to36_280">280</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_pIB&nbsp;=&nbsp;NULL;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_339">339</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_pImageInstance&nbsp;=&nbsp;NULL;</td><td class="diff_next"></td><td class="diff_header" id="to36_281">281</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_pImageInstance&nbsp;=&nbsp;NULL;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_340">340</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to36_282">282</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_341">341</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_kVct_pkParticleSnow.reserve(m_dwParticleMaxNum);</td><td class="diff_next"></td><td class="diff_header" id="to36_283">283</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;m_kVct_pkParticleSnow.reserve(m_dwParticleMaxNum);</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from36_342">342</td><td nowrap="nowrap">}</td><td class="diff_next"></td><td class="diff_header" id="to36_284">284</td><td nowrap="nowrap">}</td></tr>
+        </tbody>
+    </table></div><details><summary>Read complete source</summary><div class="complete"><div><h3>Previous</h3><pre>#include &quot;StdAfx.h&quot;
+#include &quot;SnowEnvironment.h&quot;
+
+#include &quot;EterLib/StateManager.h&quot;
+#include &quot;EterLib/Camera.h&quot;
+#include &quot;EterLib/ResourceManager.h&quot;
+#include &quot;SnowParticle.h&quot;
+
+void CSnowEnvironment::Enable()
+{
+	if (!m_bSnowEnable)
+	{
+		Create();
+	}
+
+	m_bSnowEnable = TRUE;
+}
+
+void CSnowEnvironment::Disable()
+{
+	m_bSnowEnable = FALSE;
+}
+
+void CSnowEnvironment::Update(const D3DXVECTOR3 &amp; c_rv3Pos)
+{
+	if (!m_bSnowEnable)
+	{
+		if (m_kVct_pkParticleSnow.empty())
+			return;
+	}
+
+	m_v3Center=c_rv3Pos;
+}
+
+void CSnowEnvironment::Deform()
+{
+	if (!m_bSnowEnable)
+	{
+		if (m_kVct_pkParticleSnow.empty())
+			return;
+	}
+
+	const D3DXVECTOR3 &amp; c_rv3Pos=m_v3Center;
+	
+	static long s_lLastTime = CTimer::Instance().GetCurrentMillisecond();
+	long lcurTime = CTimer::Instance().GetCurrentMillisecond();
+	float fElapsedTime = float(lcurTime - s_lLastTime) / 1000.0f;
+	s_lLastTime = lcurTime;
+
+	CCamera * pCamera = CCameraManager::Instance().GetCurrentCamera();
+	if (!pCamera)
+		return;
+
+	const D3DXVECTOR3 &amp; c_rv3View = pCamera-&gt;GetView();
+
+	D3DXVECTOR3 v3ChangedPos = c_rv3View * 3500.0f + c_rv3Pos;
+	v3ChangedPos.z = c_rv3Pos.z;
+
+	std::vector&lt;CSnowParticle*&gt;::iterator itor = m_kVct_pkParticleSnow.begin();
+	for (; itor != m_kVct_pkParticleSnow.end();)
+	{
+		CSnowParticle * pSnow = *itor;
+		pSnow-&gt;Update(fElapsedTime, v3ChangedPos);
+
+		if (!pSnow-&gt;IsActivate())
+		{
+			CSnowParticle::Delete(pSnow);
+
+			itor = m_kVct_pkParticleSnow.erase(itor);
+		}
+		else
+		{
+			++itor;
+		}
+	}
+
+	if (m_bSnowEnable)
+	{
+		for (int p = 0; p &lt; std::min(10ull, m_dwParticleMaxNum - m_kVct_pkParticleSnow.size()); ++p)
+		{
+			CSnowParticle * pSnowParticle = CSnowParticle::New();
+			pSnowParticle-&gt;Init(v3ChangedPos);
+			m_kVct_pkParticleSnow.push_back(pSnowParticle);
+		}
+	}
+}
+
+void CSnowEnvironment::__BeginBlur()
+{
+	if (!m_bBlurEnable)
+		return;
+
+	ms_lpd3dDevice-&gt;GetRenderTarget(0, &amp;m_lpOldSurface);
+	ms_lpd3dDevice-&gt;GetDepthStencilSurface(&amp;m_lpOldDepthStencilSurface);
+	ms_lpd3dDevice-&gt;SetDepthStencilSurface(m_lpSnowDepthSurface);
+	ms_lpd3dDevice-&gt;SetRenderTarget(0, m_lpSnowRenderTargetSurface);
+	ms_lpd3dDevice-&gt;Clear(0L, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00000000, 1.0f, 0L);
+
+	STATEMANAGER.SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	STATEMANAGER.SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	STATEMANAGER.SetRenderState(D3DRS_DESTBLEND, D3DBLEND_DESTALPHA);
+}
+
+void CSnowEnvironment::__ApplyBlur()
+{
+	if (!m_bBlurEnable)
+		return;
+
+//			{
+//				STATEMANAGER.SetRenderState( D3DRS_ALPHABLENDENABLE,   TRUE );
+//				STATEMANAGER.SetRenderState( D3DRS_SRCBLEND,  D3DBLEND_SRCALPHA );
+//				STATEMANAGER.SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA );
+//				STATEMANAGER.SetRenderState( D3DRS_COLORVERTEX ,TRUE);
+//				STATEMANAGER.SetRenderState( D3DRS_DIFFUSEMATERIALSOURCE , D3DMCS_COLOR1 );
+//				STATEMANAGER.SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+//				STATEMANAGER.SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+//				STATEMANAGER.SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
+//				STATEMANAGER.SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+//				STATEMANAGER.SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+//				STATEMANAGER.SetTextureStageState(0,  D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+//				DWORD	alphaColor = 0xFFFFFF | ((DWORD)(0.6f*255.0f) &lt;&lt; 24);
+//
+//				BlurVertex V[4] = { BlurVertex(D3DXVECTOR3(0.0f,0.0f,0.0f),1.0f,		alphaColor, 0,0) ,
+//									BlurVertex(D3DXVECTOR3(wTextureSize,0.0f,0.0f),1.0f,		alphaColor, 1,0) , 
+//									BlurVertex(D3DXVECTOR3(0.0f,wTextureSize,0.0f),1.0f,		alphaColor, 0,1) , 
+//									BlurVertex(D3DXVECTOR3(wTextureSize,wTextureSize,0.0f),1.0f,	alphaColor, 1,1) };
+//				//누적 블러 텍스쳐를 찍는다.
+//				STATEMANAGER.SetTexture(0,m_lpAccumTexture);
+//				STATEMANAGER.SetFVF( D3DFVF_XYZRHW | D3DFVF_DIFFUSE|D3DFVF_TEX1 );
+//				STATEMANAGER.DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,2,V,sizeof(BlurVertex));
+//			}
+//
+//			{
+//				STATEMANAGER.SetRenderTarget(m_lpAccumRenderTargetSurface, m_lpAccumDepthSurface);
+//
+//				BlurVertex V[4] = { BlurVertex(D3DXVECTOR3(0.0f,0.0f,0.0f),1.0f,		0xFFFFFF, 0,0) ,
+//									BlurVertex(D3DXVECTOR3(wTextureSize,0.0f,0.0f),1.0f,		0xFFFFFF, 1,0) , 
+//									BlurVertex(D3DXVECTOR3(0.0f,wTextureSize,0.0f),1.0f,		0xFFFFFF, 0,1) , 
+//									BlurVertex(D3DXVECTOR3(wTextureSize,wTextureSize,0.0f),1.0f,	0xFFFFFF, 1,1) };
+//
+//				STATEMANAGER.SetTexture(0,m_lpSnowTexture);
+//				STATEMANAGER.SetRenderState( D3DRS_ALPHABLENDENABLE,   FALSE);
+//				STATEMANAGER.SetFVF( D3DFVF_XYZRHW | D3DFVF_DIFFUSE|D3DFVF_TEX1 );
+//				STATEMANAGER.DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,2,V,sizeof(BlurVertex));
+//			}
+
+	///////////////
+	{
+		ms_lpd3dDevice-&gt;SetDepthStencilSurface(m_lpOldDepthStencilSurface);
+		ms_lpd3dDevice-&gt;SetRenderTarget(0, m_lpOldSurface);
+
+		STATEMANAGER.SetTexture(0,m_lpSnowTexture);
+		STATEMANAGER.SetRenderState( D3DRS_ALPHABLENDENABLE,   TRUE);
+
+		D3DSURFACE_DESC	desc;
+		m_lpOldSurface-&gt;GetDesc(&amp;desc);
+		float sx = (float)desc.Width ;
+		float sy = (float)desc.Height;
+		SAFE_RELEASE( m_lpOldSurface );
+		SAFE_RELEASE( m_lpOldDepthStencilSurface );
+
+		BlurVertex V[4] = {	BlurVertex(D3DXVECTOR3(0.0f,0.0f,0.0f),1.0f	,0xFFFFFF, 0,0) ,
+							BlurVertex(D3DXVECTOR3(sx,0.0f,0.0f),1.0f	,0xFFFFFF, 1,0) , 
+							BlurVertex(D3DXVECTOR3(0.0f,sy,0.0f),1.0f	,0xFFFFFF, 0,1) , 
+							BlurVertex(D3DXVECTOR3(sx,sy,0.0f),1.0f		,0xFFFFFF, 1,1) };
+
+		STATEMANAGER.SetFVF( D3DFVF_XYZRHW | D3DFVF_DIFFUSE|D3DFVF_TEX1 );
+		STATEMANAGER.DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,2,V,sizeof(BlurVertex));
+	}
+}
+
+void CSnowEnvironment::Render()
+{
+	if (!m_bSnowEnable)
+	{
+		if (m_kVct_pkParticleSnow.empty())
+			return;
+	}
+
+	__BeginBlur();
+
+	DWORD dwParticleCount = std::min((size_t)m_dwParticleMaxNum, m_kVct_pkParticleSnow.size());
+
+	CCamera * pCamera = CCameraManager::Instance().GetCurrentCamera();
+	if (!pCamera)
+		return;
+
+	const D3DXVECTOR3 &amp; c_rv3Up = pCamera-&gt;GetUp();
+	const D3DXVECTOR3 &amp; c_rv3Cross = pCamera-&gt;GetCross();
+
+	SParticleVertex * pv3Verticies;
+	if (SUCCEEDED(m_pVB-&gt;Lock(0, sizeof(SParticleVertex)*dwParticleCount*4, (void **) &amp;pv3Verticies, D3DLOCK_DISCARD)))
+	{
+		int i = 0;
+		std::vector&lt;CSnowParticle*&gt;::iterator itor = m_kVct_pkParticleSnow.begin();
+		for (; i &lt; dwParticleCount &amp;&amp; itor != m_kVct_pkParticleSnow.end(); ++i, ++itor)
+		{
+			CSnowParticle * pSnow = *itor;
+			pSnow-&gt;SetCameraVertex(c_rv3Up, c_rv3Cross);
+			pSnow-&gt;GetVerticies(pv3Verticies[i*4+0],
+								pv3Verticies[i*4+1],
+								pv3Verticies[i*4+2],
+								pv3Verticies[i*4+3]);
+		}
+		m_pVB-&gt;Unlock();
+	}
+
+	STATEMANAGER.SaveRenderState(D3DRS_ZWRITEENABLE, FALSE);
+	STATEMANAGER.SaveRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	STATEMANAGER.SaveRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	STATEMANAGER.SetRenderState(D3DRS_SRCBLEND,  D3DBLEND_SRCALPHA);
+	STATEMANAGER.SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	STATEMANAGER.SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	STATEMANAGER.SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+	STATEMANAGER.SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	STATEMANAGER.SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
+	STATEMANAGER.SetTexture(1, NULL);
+	STATEMANAGER.SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
+	STATEMANAGER.SetTextureStageState(1, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
+
+	m_pImageInstance-&gt;GetGraphicImagePointer()-&gt;GetTextureReference().SetTextureStage(0);
+	STATEMANAGER.SetIndices(m_pIB, 0);
+	STATEMANAGER.SetStreamSource(0, m_pVB, sizeof(SParticleVertex));
+	STATEMANAGER.SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
+	STATEMANAGER.DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, dwParticleCount*4, 0, dwParticleCount*2);
+	STATEMANAGER.RestoreRenderState(D3DRS_ALPHABLENDENABLE);
+	STATEMANAGER.RestoreRenderState(D3DRS_ZWRITEENABLE);
+	STATEMANAGER.RestoreRenderState(D3DRS_CULLMODE);
+
+	__ApplyBlur();
+}
+
+bool CSnowEnvironment::__CreateBlurTexture()
+{
+	if (!m_bBlurEnable)
+		return true;
+
+	if (FAILED(ms_lpd3dDevice-&gt;CreateTexture(m_wBlurTextureSize, m_wBlurTextureSize, 1, D3DUSAGE_RENDERTARGET, D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &amp;m_lpSnowTexture, nullptr)))
+		return false;
+	if (FAILED(m_lpSnowTexture-&gt;GetSurfaceLevel(0, &amp;m_lpSnowRenderTargetSurface)))
+		return false;
+	if (FAILED(ms_lpd3dDevice-&gt;CreateDepthStencilSurface(m_wBlurTextureSize, m_wBlurTextureSize, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0, TRUE, &amp;m_lpSnowDepthSurface, nullptr)))
+		return false;
+
+	if (FAILED(ms_lpd3dDevice-&gt;CreateTexture(m_wBlurTextureSize, m_wBlurTextureSize, 1, D3DUSAGE_RENDERTARGET, D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &amp;m_lpAccumTexture, nullptr)))
+		return false;
+	if (FAILED(m_lpAccumTexture-&gt;GetSurfaceLevel(0, &amp;m_lpAccumRenderTargetSurface)))
+		return false;
+	if (FAILED(ms_lpd3dDevice-&gt;CreateDepthStencilSurface(m_wBlurTextureSize, m_wBlurTextureSize, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0, TRUE, &amp;m_lpAccumDepthSurface, nullptr)))
+		return false;
+
+	return true;
+}
+
+bool CSnowEnvironment::__CreateGeometry()
+{
+	if (FAILED(ms_lpd3dDevice-&gt;CreateVertexBuffer(sizeof(SParticleVertex) * m_dwParticleMaxNum * 4,
+		D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
+		D3DFVF_XYZ | D3DFVF_TEX1,
+		D3DPOOL_DEFAULT,
+		&amp;m_pVB, nullptr)))
+		return false;
+
+	if (FAILED(ms_lpd3dDevice-&gt;CreateIndexBuffer(sizeof(WORD) * m_dwParticleMaxNum * 6,
+		D3DUSAGE_DYNAMIC,
+		D3DFMT_INDEX16,
+		D3DPOOL_DEFAULT,
+		&amp;m_pIB, nullptr)))
+		return false;
+
+	WORD* dstIndices;
+	if (FAILED(m_pIB-&gt;Lock(0, sizeof(WORD) * m_dwParticleMaxNum * 6, (void**)&amp;dstIndices, 0)))
+		return false;
+
+	const WORD c_awFillRectIndices[6] = { 0, 2, 1, 2, 3, 1, };
+	for (int i = 0; i &lt; m_dwParticleMaxNum; ++i)
+	{
+		for (int j = 0; j &lt; 6; ++j)
+		{
+			dstIndices[i*6 + j] = i*4 + c_awFillRectIndices[j];
+		}
+	}
+
+	m_pIB-&gt;Unlock();
+	return true;
+}
+
+bool CSnowEnvironment::Create()
+{
+	Destroy();
+
+	if (!__CreateBlurTexture())
+		return false;
+
+	if (!__CreateGeometry())
+		return false;
+
+	CGraphicImage * pImage = (CGraphicImage *)CResourceManager::Instance().GetResourcePointer(&quot;d:/ymir work/special/snow.dds&quot;);
+	m_pImageInstance = CGraphicImageInstance::New();
+	m_pImageInstance-&gt;SetImagePointer(pImage);
+
+	return true;
+}
+
+void CSnowEnvironment::Destroy()
+{
+	SAFE_RELEASE(m_lpSnowTexture);
+	SAFE_RELEASE(m_lpSnowRenderTargetSurface);
+	SAFE_RELEASE(m_lpSnowDepthSurface);
+	SAFE_RELEASE(m_lpAccumTexture);
+	SAFE_RELEASE(m_lpAccumRenderTargetSurface);
+	SAFE_RELEASE(m_lpAccumDepthSurface);
+	SAFE_RELEASE(m_pVB);
+	SAFE_RELEASE(m_pIB);
+
+	stl_wipe(m_kVct_pkParticleSnow);
+	CSnowParticle::DestroyPool();
+
+	if (m_pImageInstance)
+	{
+		CGraphicImageInstance::Delete(m_pImageInstance);
+		m_pImageInstance = NULL;
+	}
+
+	__Initialize();
+}
+
+void CSnowEnvironment::__Initialize()
+{
+	m_bSnowEnable = FALSE;
+	m_lpSnowTexture = NULL;
+	m_lpSnowRenderTargetSurface = NULL;
+	m_lpSnowDepthSurface = NULL;
+	m_lpAccumTexture = NULL;
+	m_lpAccumRenderTargetSurface = NULL;
+	m_lpAccumDepthSurface = NULL;
+	m_pVB = NULL;
+	m_pIB = NULL;
+	m_pImageInstance = NULL;
+
+	m_kVct_pkParticleSnow.reserve(m_dwParticleMaxNum);
+}
+
+CSnowEnvironment::CSnowEnvironment()
+{
+	m_bBlurEnable = FALSE;
+	m_dwParticleMaxNum = 3000;
+	m_wBlurTextureSize = 512;
+
+	__Initialize();
+}
+CSnowEnvironment::~CSnowEnvironment()
+{
+	Destroy();
+}
+</pre></div><div><h3>Updated</h3><pre>#include &quot;StdAfx.h&quot;
+#include &quot;SnowEnvironment.h&quot;
+
+#include &quot;EterLib/GrpImageInstance.h&quot;
+#include &quot;EterLib/StateManager.h&quot;
+#include &quot;EterLib/Camera.h&quot;
+#include &quot;EterLib/ResourceManager.h&quot;
+#include &quot;SnowParticle.h&quot;
+#include &quot;EterLib/GraphicsStartup.h&quot;
+#include &quot;EterLib/RenderTargetBinding.h&quot;
+#include &quot;EterLib/GeometryBufferUpload.h&quot;
+
+void CSnowEnvironment::Enable()
+{
+	if (m_bSnowEnable) return;
+	if (!Create())
+	{
+		TraceError(&quot;Graphics: snow creation failed; effect remains disabled&quot;);
+		return;
+	}
+	m_bSnowEnable = TRUE;
+}
+
+void CSnowEnvironment::Disable()
+{
+	m_bSnowEnable = FALSE;
+}
+
+void CSnowEnvironment::Update(const D3DXVECTOR3 &amp; c_rv3Pos)
+{
+	if (!m_bSnowEnable)
+	{
+		if (m_kVct_pkParticleSnow.empty())
+			return;
+	}
+
+	m_v3Center=c_rv3Pos;
+}
+
+void CSnowEnvironment::Deform()
+{
+	if (!m_bSnowEnable)
+	{
+		if (m_kVct_pkParticleSnow.empty())
+			return;
+	}
+
+	const D3DXVECTOR3 &amp; c_rv3Pos=m_v3Center;
+	
+	static long s_lLastTime = CTimer::Instance().GetCurrentMillisecond();
+	long lcurTime = CTimer::Instance().GetCurrentMillisecond();
+	float fElapsedTime = float(lcurTime - s_lLastTime) / 1000.0f;
+	s_lLastTime = lcurTime;
+
+	CCamera * pCamera = CCameraManager::Instance().GetCurrentCamera();
+	if (!pCamera)
+		return;
+
+	const D3DXVECTOR3 &amp; c_rv3View = pCamera-&gt;GetView();
+
+	D3DXVECTOR3 v3ChangedPos = c_rv3View * 3500.0f + c_rv3Pos;
+	v3ChangedPos.z = c_rv3Pos.z;
+
+	std::vector&lt;CSnowParticle*&gt;::iterator itor = m_kVct_pkParticleSnow.begin();
+	for (; itor != m_kVct_pkParticleSnow.end();)
+	{
+		CSnowParticle * pSnow = *itor;
+		pSnow-&gt;Update(fElapsedTime, v3ChangedPos);
+
+		if (!pSnow-&gt;IsActivate())
+		{
+			CSnowParticle::Delete(pSnow);
+
+			itor = m_kVct_pkParticleSnow.erase(itor);
+		}
+		else
+		{
+			++itor;
+		}
+	}
+
+	if (m_bSnowEnable)
+	{
+		const size_t available = m_kVct_pkParticleSnow.size() &lt; m_dwParticleMaxNum ? m_dwParticleMaxNum - m_kVct_pkParticleSnow.size() : 0;
+		for (size_t p = 0; p &lt; (std::min)(size_t(10), available - p); ++p)
+		{
+			CSnowParticle * pSnowParticle = CSnowParticle::New();
+			pSnowParticle-&gt;Init(v3ChangedPos);
+			m_kVct_pkParticleSnow.push_back(pSnowParticle);
+		}
+	}
+}
+
+bool CSnowEnvironment::Render()
+{
+	if (CGraphicsRestoreStatus::Instance().IsBlocked()) return false;
+	if (!m_bSnowEnable)
+	{
+		if (m_kVct_pkParticleSnow.empty())
+			return false;
+	}
+
+	const DWORD dwParticleCount = static_cast&lt;DWORD&gt;((std::min)(static_cast&lt;size_t&gt;(m_dwParticleMaxNum), m_kVct_pkParticleSnow.size()));
+	if (!dwParticleCount || !m_pVB || !m_pIB || !m_pImageInstance || m_pImageInstance-&gt;IsEmpty()) return false;
+	if (!m_pImageInstance-&gt;GetGraphicImagePointer()-&gt;GetTextureReference().GetD3DTexture()) return false;
+
+	CCamera * pCamera = CCameraManager::Instance().GetCurrentCamera();
+	if (!pCamera)
+		return false;
+
+	const D3DXVECTOR3 &amp; c_rv3Up = pCamera-&gt;GetUp();
+	const D3DXVECTOR3 &amp; c_rv3Cross = pCamera-&gt;GetCross();
+
+	SParticleVertex * pv3Verticies = nullptr;
+	if (GeometryBufferUpload::Lock(m_pVB, sizeof(SParticleVertex)*dwParticleCount*4, (void**)&amp;pv3Verticies, D3DLOCK_DISCARD))
+	{
+		int i = 0;
+		std::vector&lt;CSnowParticle*&gt;::iterator itor = m_kVct_pkParticleSnow.begin();
+		for (; i &lt; dwParticleCount &amp;&amp; itor != m_kVct_pkParticleSnow.end(); ++i, ++itor)
+		{
+			CSnowParticle * pSnow = *itor;
+			pSnow-&gt;SetCameraVertex(c_rv3Up, c_rv3Cross);
+			pSnow-&gt;GetVerticies(pv3Verticies[i*4+0],
+								pv3Verticies[i*4+1],
+								pv3Verticies[i*4+2],
+								pv3Verticies[i*4+3]);
+		}
+		if (FAILED(m_pVB-&gt;Unlock())) return false;
+	}
+	else return false; // Never draw stale geometry after a failed upload.
+
+	CStateManager::ScopedState drawingState(STATEMANAGER);
+	if (!drawingState.IsValid()) return false;
+	CRenderTargetBinding blurTarget; // Restores before drawingState on every exit.
+	D3DVIEWPORT9 originalViewport = {};
+	if (m_bBlurEnable)
+	{
+		if (!m_lpSnowTexture || !m_lpSnowRenderTargetSurface || !m_lpSnowDepthSurface) return false;
+		if (FAILED(ms_lpd3dDevice-&gt;GetViewport(&amp;originalViewport))) return false;
+		const D3DVIEWPORT9 viewport = {0, 0, m_wBlurTextureSize, m_wBlurTextureSize, 0.0f, 1.0f};
+		if (FAILED(blurTarget.Bind(ms_lpd3dDevice, m_lpSnowRenderTargetSurface, m_lpSnowDepthSurface, viewport))) return false;
+		if (FAILED(ms_lpd3dDevice-&gt;Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0, 1.0f, 0))) return false;
+	}
+
+	if (FAILED(STATEMANAGER.SetRenderState(D3DRS_ZWRITEENABLE, FALSE))) return false;
+	if (FAILED(STATEMANAGER.SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE))) return false;
+	if (FAILED(STATEMANAGER.SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE))) return false;
+	if (FAILED(STATEMANAGER.SetRenderState(D3DRS_SRCBLEND,  D3DBLEND_SRCALPHA))) return false;
+	if (FAILED(STATEMANAGER.SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA))) return false;
+	if (FAILED(STATEMANAGER.SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE))) return false;
+	if (FAILED(STATEMANAGER.SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1))) return false;
+	if (FAILED(STATEMANAGER.SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE))) return false;
+	if (FAILED(STATEMANAGER.SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1))) return false;
+	if (FAILED(STATEMANAGER.SetTexture(1, NULL))) return false;
+	if (FAILED(STATEMANAGER.SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE))) return false;
+	if (FAILED(STATEMANAGER.SetTextureStageState(1, D3DTSS_ALPHAOP, D3DTOP_DISABLE))) return false;
+
+	if (FAILED(STATEMANAGER.SetTexture(0, m_pImageInstance-&gt;GetGraphicImagePointer()-&gt;GetTextureReference().GetD3DTexture()))) return false;
+	if (FAILED(STATEMANAGER.SetIndices(m_pIB, 0))) return false;
+	if (FAILED(STATEMANAGER.SetStreamSource(0, m_pVB, sizeof(SParticleVertex)))) return false;
+	if (FAILED(STATEMANAGER.SetFVF(D3DFVF_XYZ | D3DFVF_TEX1))) return false;
+	if (FAILED(STATEMANAGER.DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, dwParticleCount*4, 0, dwParticleCount*2))) return false;
+	if (m_bBlurEnable)
+	{
+		if (FAILED(blurTarget.Restore())) return false;
+		if (FAILED(STATEMANAGER.SetTexture(0, m_lpSnowTexture))) return false;
+		const float x = static_cast&lt;float&gt;(originalViewport.X), y = static_cast&lt;float&gt;(originalViewport.Y);
+		const float right = x + originalViewport.Width, bottom = y + originalViewport.Height;
+		BlurVertex vertices[4] = {
+			BlurVertex(D3DXVECTOR3(x,y,0),1,0xFFFFFF,0,0),
+			BlurVertex(D3DXVECTOR3(right,y,0),1,0xFFFFFF,1,0),
+			BlurVertex(D3DXVECTOR3(x,bottom,0),1,0xFFFFFF,0,1),
+			BlurVertex(D3DXVECTOR3(right,bottom,0),1,0xFFFFFF,1,1)};
+		if (FAILED(STATEMANAGER.SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1))) return false;
+		if (FAILED(STATEMANAGER.DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vertices, sizeof(BlurVertex)))) return false;
+	}
+	return SUCCEEDED(drawingState.Restore());
+}
+
+bool CSnowEnvironment::__CreateBlurTexture()
+{
+	if (!m_bBlurEnable)
+		return true;
+
+	if (FAILED(ms_lpd3dDevice-&gt;CreateTexture(m_wBlurTextureSize, m_wBlurTextureSize, 1, D3DUSAGE_RENDERTARGET, D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &amp;m_lpSnowTexture, nullptr)))
+		return false;
+	if (FAILED(m_lpSnowTexture-&gt;GetSurfaceLevel(0, &amp;m_lpSnowRenderTargetSurface)))
+		return false;
+	if (FAILED(ms_lpd3dDevice-&gt;CreateDepthStencilSurface(m_wBlurTextureSize, m_wBlurTextureSize, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0, TRUE, &amp;m_lpSnowDepthSurface, nullptr)))
+		return false;
+
+	return true;
+}
+
+bool CSnowEnvironment::__CreateGeometry()
+{
+	if (!ms_lpd3dDevice || m_pVB || m_pIB || !m_dwParticleMaxNum || m_dwParticleMaxNum &gt; 16384) return false;
+	if (FAILED(ms_lpd3dDevice-&gt;CreateVertexBuffer(sizeof(SParticleVertex) * m_dwParticleMaxNum * 4,
+		D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
+		D3DFVF_XYZ | D3DFVF_TEX1,
+		D3DPOOL_DEFAULT,
+		&amp;m_pVB, nullptr)))
+		return false;
+
+	if (FAILED(ms_lpd3dDevice-&gt;CreateIndexBuffer(sizeof(WORD) * m_dwParticleMaxNum * 6,
+		D3DUSAGE_DYNAMIC,
+		D3DFMT_INDEX16,
+		D3DPOOL_DEFAULT,
+		&amp;m_pIB, nullptr)))
+		return false;
+
+	WORD* dstIndices = nullptr;
+	if (!GeometryBufferUpload::Lock(m_pIB, sizeof(WORD) * m_dwParticleMaxNum * 6, (void**)&amp;dstIndices))
+		return false;
+
+	const WORD c_awFillRectIndices[6] = { 0, 2, 1, 2, 3, 1, };
+	for (int i = 0; i &lt; m_dwParticleMaxNum; ++i)
+	{
+		for (int j = 0; j &lt; 6; ++j)
+		{
+			dstIndices[i*6 + j] = i*4 + c_awFillRectIndices[j];
+		}
+	}
+
+	return SUCCEEDED(m_pIB-&gt;Unlock());
+}
+
+bool CSnowEnvironment::Create()
+{
+	Destroy();
+	const auto cleanup = [this]() { Destroy(); };
+	GraphicsStartup::Rollback&lt;decltype(cleanup)&gt; rollback(cleanup);
+	if (!ms_lpd3dDevice) return false;
+
+	if (!__CreateBlurTexture())
+		return false;
+
+	if (!__CreateGeometry())
+		return false;
+
+	CResource* resource = CResourceManager::Instance().GetResourcePointer(&quot;d:/ymir work/special/snow.dds&quot;);
+	if (!resource || !resource-&gt;IsType(CGraphicImage::Type())) return false;
+	CGraphicImage* pImage = static_cast&lt;CGraphicImage*&gt;(resource);
+	m_pImageInstance = CGraphicImageInstance::New();
+	if (!m_pImageInstance) return false;
+	m_pImageInstance-&gt;SetImagePointer(pImage);
+	if (m_pImageInstance-&gt;IsEmpty() || !pImage-&gt;GetTextureReference().GetD3DTexture()) return false;
+	rollback.Complete();
+	return true;
+}
+
+void CSnowEnvironment::Destroy()
+{
+	SAFE_RELEASE(m_lpSnowTexture);
+	SAFE_RELEASE(m_lpSnowRenderTargetSurface);
+	SAFE_RELEASE(m_lpSnowDepthSurface);
+	SAFE_RELEASE(m_pVB);
+	SAFE_RELEASE(m_pIB);
+
+	stl_wipe(m_kVct_pkParticleSnow);
+	CSnowParticle::DestroyPool();
+
+	if (m_pImageInstance)
+	{
+		CGraphicImageInstance::Delete(m_pImageInstance);
+		m_pImageInstance = NULL;
+	}
+
+	__Initialize();
+}
+
+void CSnowEnvironment::__Initialize()
+{
+	m_bSnowEnable = FALSE;
+	m_v3Center = D3DXVECTOR3(0, 0, 0);
+	m_lpSnowTexture = NULL;
+	m_lpSnowRenderTargetSurface = NULL;
+	m_lpSnowDepthSurface = NULL;
+	m_pVB = NULL;
+	m_pIB = NULL;
+	m_pImageInstance = NULL;
+
+	m_kVct_pkParticleSnow.reserve(m_dwParticleMaxNum);
+}
+
+CSnowEnvironment::CSnowEnvironment()
+{
+	m_bBlurEnable = FALSE;
+	m_dwParticleMaxNum = 3000;
+	m_wBlurTextureSize = 512;
+
+	__Initialize();
+}
+CSnowEnvironment::~CSnowEnvironment()
+{
+	Destroy();
+}
+</pre></div></div></details></section><section id="file-1" data-search="src/gamelib/snowenvironment.h"><h2>src/GameLib/SnowEnvironment.h</h2><p class="meta">Modified file</p><button data-file="file-1" data-download="before" >Download before</button><button data-file="file-1" data-download="after" >Download after</button><div class="scroll" tabindex="0" role="region" aria-label="Before and after code for src/GameLib/SnowEnvironment.h">
+    <table class="diff" id="difflib_chg_to37__top"
+           cellspacing="0" cellpadding="0" rules="groups" >
+        <colgroup></colgroup> <colgroup></colgroup> <colgroup></colgroup>
+        <colgroup></colgroup> <colgroup></colgroup> <colgroup></colgroup>
+        <thead><tr><th class="diff_next"><br /></th><th colspan="2" class="diff_header">Previous · 1ee24e5</th><th class="diff_next"><br /></th><th colspan="2" class="diff_header">Updated · v12 snapshot</th></tr></thead>
+        <tbody>
+            <tr><td class="diff_next" id="difflib_chg_to37__1"><a href="#difflib_chg_to37__top">f</a></td><td class="diff_header" id="from37_1">1</td><td nowrap="nowrap">#pragma&nbsp;once</td><td class="diff_next"><a href="#difflib_chg_to37__top">f</a></td><td class="diff_header" id="to37_1">1</td><td nowrap="nowrap">#pragma&nbsp;once</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_2">2</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to37_2">2</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_3">3</td><td nowrap="nowrap">#include&nbsp;"EterLib/GrpScreen.h"</td><td class="diff_next"></td><td class="diff_header" id="to37_3">3</td><td nowrap="nowrap">#include&nbsp;"EterLib/GrpScreen.h"</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to37__1">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"><a href="#difflib_chg_to37__1">n</a></td><td class="diff_header" id="to37_4">4</td><td nowrap="nowrap"><span class="diff_add">#include&nbsp;&lt;vector&gt;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_4">4</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to37_5">5</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to37__2">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td><td class="diff_next"><a href="#difflib_chg_to37__2">n</a></td><td class="diff_header" id="to37_6">6</td><td nowrap="nowrap"><span class="diff_add">class&nbsp;CGraphicImageInstance;</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_5">5</td><td nowrap="nowrap">class&nbsp;CSnowParticle;</td><td class="diff_next"></td><td class="diff_header" id="to37_7">7</td><td nowrap="nowrap">class&nbsp;CSnowParticle;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_6">6</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to37_8">8</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_7">7</td><td nowrap="nowrap">class&nbsp;CSnowEnvironment&nbsp;:&nbsp;public&nbsp;CScreen</td><td class="diff_next"></td><td class="diff_header" id="to37_9">9</td><td nowrap="nowrap">class&nbsp;CSnowEnvironment&nbsp;:&nbsp;public&nbsp;CScreen</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_8">8</td><td nowrap="nowrap">{</td><td class="diff_next"></td><td class="diff_header" id="to37_10">10</td><td nowrap="nowrap">{</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_9">9</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;public:</td><td class="diff_next"></td><td class="diff_header" id="to37_11">11</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;public:</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_10">10</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CSnowEnvironment();</td><td class="diff_next"></td><td class="diff_header" id="to37_12">12</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CSnowEnvironment();</td></tr>
+        </tbody>        
+        <tbody>
+            <tr><td class="diff_next" id="difflib_chg_to37__2"></td><td class="diff_header" id="from37_15">15</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to37_17">17</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_16">16</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;Enable();</td><td class="diff_next"></td><td class="diff_header" id="to37_18">18</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;Enable();</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_17">17</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;Disable();</td><td class="diff_next"></td><td class="diff_header" id="to37_19">19</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;Disable();</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_18">18</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to37_20">20</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_19">19</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;Update(const&nbsp;D3DXVECTOR3&nbsp;&amp;&nbsp;c_rv3Pos);</td><td class="diff_next"></td><td class="diff_header" id="to37_21">21</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;Update(const&nbsp;D3DXVECTOR3&nbsp;&amp;&nbsp;c_rv3Pos);</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_20">20</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;Deform();</td><td class="diff_next"></td><td class="diff_header" id="to37_22">22</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;Deform();</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to37__3"><a href="#difflib_chg_to37__3">n</a></td><td class="diff_header" id="from37_21">21</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;Render();</span></td><td class="diff_next"><a href="#difflib_chg_to37__3">n</a></td><td class="diff_header" id="to37_23">23</td><td nowrap="nowrap"><span class="diff_add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool&nbsp;Render();&nbsp;//&nbsp;False&nbsp;when&nbsp;skipped&nbsp;or&nbsp;failed;&nbsp;ordinary&nbsp;callers&nbsp;may&nbsp;ignore.</span></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_22">22</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to37_24">24</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_23">23</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;protected:</td><td class="diff_next"></td><td class="diff_header" id="to37_25">25</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;protected:</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_24">24</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;__Initialize();</td><td class="diff_next"></td><td class="diff_header" id="to37_26">26</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;__Initialize();</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to37__4"></td><td class="diff_header" id="from37_25">25</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool&nbsp;__CreateBlurTexture();</td><td class="diff_next"></td><td class="diff_header" id="to37_27">27</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool&nbsp;__CreateBlurTexture();</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_26">26</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool&nbsp;__CreateGeometry();</td><td class="diff_next"></td><td class="diff_header" id="to37_28">28</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool&nbsp;__CreateGeometry();</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to37__4">n</a></td><td class="diff_header" id="from37_27">27</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;__BeginBlur();</span></td><td class="diff_next"><a href="#difflib_chg_to37__4">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_28">28</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;__ApplyBlur();</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_29">29</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to37_29">29</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_30">30</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;protected:</td><td class="diff_next"></td><td class="diff_header" id="to37_30">30</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;protected:</td></tr>
+            <tr><td class="diff_next" id="difflib_chg_to37__5"><a href="#difflib_chg_to37__5">n</a></td><td class="diff_header" id="from37_31">31</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DSURFACE9&nbsp;m_lpOldSurface;</span></td><td class="diff_next"><a href="#difflib_chg_to37__5">n</a></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_32">32</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DSURFACE9&nbsp;m_lpOldDepthStencilSurface;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_33">33</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to37_31">31</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_34">34</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DTEXTURE9&nbsp;m_lpSnowTexture;</td><td class="diff_next"></td><td class="diff_header" id="to37_32">32</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DTEXTURE9&nbsp;m_lpSnowTexture;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_35">35</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DSURFACE9&nbsp;m_lpSnowRenderTargetSurface;</td><td class="diff_next"></td><td class="diff_header" id="to37_33">33</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DSURFACE9&nbsp;m_lpSnowRenderTargetSurface;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_36">36</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DSURFACE9&nbsp;m_lpSnowDepthSurface;</td><td class="diff_next"></td><td class="diff_header" id="to37_34">34</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DSURFACE9&nbsp;m_lpSnowDepthSurface;</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to37__top">t</a></td><td class="diff_header" id="from37_37">37</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"><a href="#difflib_chg_to37__top">t</a></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_38">38</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DTEXTURE9&nbsp;m_lpAccumTexture;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_39">39</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DSURFACE9&nbsp;m_lpAccumRenderTargetSurface;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_40">40</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DSURFACE9&nbsp;m_lpAccumDepthSurface;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_41">41</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to37_35">35</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_42">42</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DVERTEXBUFFER9&nbsp;m_pVB;</td><td class="diff_next"></td><td class="diff_header" id="to37_36">36</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DVERTEXBUFFER9&nbsp;m_pVB;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_43">43</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DINDEXBUFFER9&nbsp;m_pIB;</td><td class="diff_next"></td><td class="diff_header" id="to37_37">37</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPDIRECT3DINDEXBUFFER9&nbsp;m_pIB;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_44">44</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to37_38">38</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_45">45</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DXVECTOR3&nbsp;m_v3Center;</td><td class="diff_next"></td><td class="diff_header" id="to37_39">39</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D3DXVECTOR3&nbsp;m_v3Center;</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from37_46">46</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to37_40">40</td><td nowrap="nowrap"></td></tr>
+        </tbody>
+    </table></div><details><summary>Read complete source</summary><div class="complete"><div><h3>Previous</h3><pre>#pragma once
+
+#include &quot;EterLib/GrpScreen.h&quot;
+
+class CSnowParticle;
+
+class CSnowEnvironment : public CScreen
+{
+	public:
+		CSnowEnvironment();
+		virtual ~CSnowEnvironment();
+
+		bool Create();
+		void Destroy();
+
+		void Enable();
+		void Disable();
+
+		void Update(const D3DXVECTOR3 &amp; c_rv3Pos);
+		void Deform();
+		void Render();
+
+	protected:		
+		void __Initialize();
+		bool __CreateBlurTexture();
+		bool __CreateGeometry();
+		void __BeginBlur();
+		void __ApplyBlur();
+
+	protected:
+		LPDIRECT3DSURFACE9 m_lpOldSurface;
+		LPDIRECT3DSURFACE9 m_lpOldDepthStencilSurface;
+
+		LPDIRECT3DTEXTURE9 m_lpSnowTexture;
+		LPDIRECT3DSURFACE9 m_lpSnowRenderTargetSurface;
+		LPDIRECT3DSURFACE9 m_lpSnowDepthSurface;
+
+		LPDIRECT3DTEXTURE9 m_lpAccumTexture;
+		LPDIRECT3DSURFACE9 m_lpAccumRenderTargetSurface;
+		LPDIRECT3DSURFACE9 m_lpAccumDepthSurface;
+
+		LPDIRECT3DVERTEXBUFFER9 m_pVB;
+		LPDIRECT3DINDEXBUFFER9 m_pIB;
+
+		D3DXVECTOR3 m_v3Center;
+
+		WORD m_wBlurTextureSize;
+		CGraphicImageInstance * m_pImageInstance;
+		std::vector&lt;CSnowParticle*&gt; m_kVct_pkParticleSnow;
+
+		DWORD m_dwParticleMaxNum;
+		BOOL m_bBlurEnable;
+
+		BOOL m_bSnowEnable;
+};
+</pre></div><div><h3>Updated</h3><pre>#pragma once
+
+#include &quot;EterLib/GrpScreen.h&quot;
+#include &lt;vector&gt;
+
+class CGraphicImageInstance;
+class CSnowParticle;
+
+class CSnowEnvironment : public CScreen
+{
+	public:
+		CSnowEnvironment();
+		virtual ~CSnowEnvironment();
+
+		bool Create();
+		void Destroy();
+
+		void Enable();
+		void Disable();
+
+		void Update(const D3DXVECTOR3 &amp; c_rv3Pos);
+		void Deform();
+		bool Render(); // False when skipped or failed; ordinary callers may ignore.
+
+	protected:		
+		void __Initialize();
+		bool __CreateBlurTexture();
+		bool __CreateGeometry();
+
+	protected:
+
+		LPDIRECT3DTEXTURE9 m_lpSnowTexture;
+		LPDIRECT3DSURFACE9 m_lpSnowRenderTargetSurface;
+		LPDIRECT3DSURFACE9 m_lpSnowDepthSurface;
+
+		LPDIRECT3DVERTEXBUFFER9 m_pVB;
+		LPDIRECT3DINDEXBUFFER9 m_pIB;
+
+		D3DXVECTOR3 m_v3Center;
+
+		WORD m_wBlurTextureSize;
+		CGraphicImageInstance * m_pImageInstance;
+		std::vector&lt;CSnowParticle*&gt; m_kVct_pkParticleSnow;
+
+		DWORD m_dwParticleMaxNum;
+		BOOL m_bBlurEnable;
+
+		BOOL m_bSnowEnable;
+};
+</pre></div></div></details></section><script type="application/json" id="source-data">{"file-0": {"path": "src/GameLib/SnowEnvironment.cpp", "before": "I2luY2x1ZGUgIlN0ZEFmeC5oIgojaW5jbHVkZSAiU25vd0Vudmlyb25tZW50LmgiCgojaW5jbHVkZSAiRXRlckxpYi9TdGF0ZU1hbmFnZXIuaCIKI2luY2x1ZGUgIkV0ZXJMaWIvQ2FtZXJhLmgiCiNpbmNsdWRlICJFdGVyTGliL1Jlc291cmNlTWFuYWdlci5oIgojaW5jbHVkZSAiU25vd1BhcnRpY2xlLmgiCgp2b2lkIENTbm93RW52aXJvbm1lbnQ6OkVuYWJsZSgpCnsKCWlmICghbV9iU25vd0VuYWJsZSkKCXsKCQlDcmVhdGUoKTsKCX0KCgltX2JTbm93RW5hYmxlID0gVFJVRTsKfQoKdm9pZCBDU25vd0Vudmlyb25tZW50OjpEaXNhYmxlKCkKewoJbV9iU25vd0VuYWJsZSA9IEZBTFNFOwp9Cgp2b2lkIENTbm93RW52aXJvbm1lbnQ6OlVwZGF0ZShjb25zdCBEM0RYVkVDVE9SMyAmIGNfcnYzUG9zKQp7CglpZiAoIW1fYlNub3dFbmFibGUpCgl7CgkJaWYgKG1fa1ZjdF9wa1BhcnRpY2xlU25vdy5lbXB0eSgpKQoJCQlyZXR1cm47Cgl9CgoJbV92M0NlbnRlcj1jX3J2M1BvczsKfQoKdm9pZCBDU25vd0Vudmlyb25tZW50OjpEZWZvcm0oKQp7CglpZiAoIW1fYlNub3dFbmFibGUpCgl7CgkJaWYgKG1fa1ZjdF9wa1BhcnRpY2xlU25vdy5lbXB0eSgpKQoJCQlyZXR1cm47Cgl9CgoJY29uc3QgRDNEWFZFQ1RPUjMgJiBjX3J2M1Bvcz1tX3YzQ2VudGVyOwoJCglzdGF0aWMgbG9uZyBzX2xMYXN0VGltZSA9IENUaW1lcjo6SW5zdGFuY2UoKS5HZXRDdXJyZW50TWlsbGlzZWNvbmQoKTsKCWxvbmcgbGN1clRpbWUgPSBDVGltZXI6Okluc3RhbmNlKCkuR2V0Q3VycmVudE1pbGxpc2Vjb25kKCk7CglmbG9hdCBmRWxhcHNlZFRpbWUgPSBmbG9hdChsY3VyVGltZSAtIHNfbExhc3RUaW1lKSAvIDEwMDAuMGY7CglzX2xMYXN0VGltZSA9IGxjdXJUaW1lOwoKCUNDYW1lcmEgKiBwQ2FtZXJhID0gQ0NhbWVyYU1hbmFnZXI6Okluc3RhbmNlKCkuR2V0Q3VycmVudENhbWVyYSgpOwoJaWYgKCFwQ2FtZXJhKQoJCXJldHVybjsKCgljb25zdCBEM0RYVkVDVE9SMyAmIGNfcnYzVmlldyA9IHBDYW1lcmEtPkdldFZpZXcoKTsKCglEM0RYVkVDVE9SMyB2M0NoYW5nZWRQb3MgPSBjX3J2M1ZpZXcgKiAzNTAwLjBmICsgY19ydjNQb3M7Cgl2M0NoYW5nZWRQb3MueiA9IGNfcnYzUG9zLno7CgoJc3RkOjp2ZWN0b3I8Q1Nub3dQYXJ0aWNsZSo+OjppdGVyYXRvciBpdG9yID0gbV9rVmN0X3BrUGFydGljbGVTbm93LmJlZ2luKCk7Cglmb3IgKDsgaXRvciAhPSBtX2tWY3RfcGtQYXJ0aWNsZVNub3cuZW5kKCk7KQoJewoJCUNTbm93UGFydGljbGUgKiBwU25vdyA9ICppdG9yOwoJCXBTbm93LT5VcGRhdGUoZkVsYXBzZWRUaW1lLCB2M0NoYW5nZWRQb3MpOwoKCQlpZiAoIXBTbm93LT5Jc0FjdGl2YXRlKCkpCgkJewoJCQlDU25vd1BhcnRpY2xlOjpEZWxldGUocFNub3cpOwoKCQkJaXRvciA9IG1fa1ZjdF9wa1BhcnRpY2xlU25vdy5lcmFzZShpdG9yKTsKCQl9CgkJZWxzZQoJCXsKCQkJKytpdG9yOwoJCX0KCX0KCglpZiAobV9iU25vd0VuYWJsZSkKCXsKCQlmb3IgKGludCBwID0gMDsgcCA8IHN0ZDo6bWluKDEwdWxsLCBtX2R3UGFydGljbGVNYXhOdW0gLSBtX2tWY3RfcGtQYXJ0aWNsZVNub3cuc2l6ZSgpKTsgKytwKQoJCXsKCQkJQ1Nub3dQYXJ0aWNsZSAqIHBTbm93UGFydGljbGUgPSBDU25vd1BhcnRpY2xlOjpOZXcoKTsKCQkJcFNub3dQYXJ0aWNsZS0+SW5pdCh2M0NoYW5nZWRQb3MpOwoJCQltX2tWY3RfcGtQYXJ0aWNsZVNub3cucHVzaF9iYWNrKHBTbm93UGFydGljbGUpOwoJCX0KCX0KfQoKdm9pZCBDU25vd0Vudmlyb25tZW50OjpfX0JlZ2luQmx1cigpCnsKCWlmICghbV9iQmx1ckVuYWJsZSkKCQlyZXR1cm47CgoJbXNfbHBkM2REZXZpY2UtPkdldFJlbmRlclRhcmdldCgwLCAmbV9scE9sZFN1cmZhY2UpOwoJbXNfbHBkM2REZXZpY2UtPkdldERlcHRoU3RlbmNpbFN1cmZhY2UoJm1fbHBPbGREZXB0aFN0ZW5jaWxTdXJmYWNlKTsKCW1zX2xwZDNkRGV2aWNlLT5TZXREZXB0aFN0ZW5jaWxTdXJmYWNlKG1fbHBTbm93RGVwdGhTdXJmYWNlKTsKCW1zX2xwZDNkRGV2aWNlLT5TZXRSZW5kZXJUYXJnZXQoMCwgbV9scFNub3dSZW5kZXJUYXJnZXRTdXJmYWNlKTsKCW1zX2xwZDNkRGV2aWNlLT5DbGVhcigwTCwgTlVMTCwgRDNEQ0xFQVJfVEFSR0VUIHwgRDNEQ0xFQVJfWkJVRkZFUiwgMHgwMDAwMDAwMCwgMS4wZiwgMEwpOwoKCVNUQVRFTUFOQUdFUi5TZXRSZW5kZXJTdGF0ZShEM0RSU19BTFBIQUJMRU5ERU5BQkxFLCBUUlVFKTsKCVNUQVRFTUFOQUdFUi5TZXRSZW5kZXJTdGF0ZShEM0RSU19TUkNCTEVORCwgRDNEQkxFTkRfU1JDQUxQSEEpOwoJU1RBVEVNQU5BR0VSLlNldFJlbmRlclN0YXRlKEQzRFJTX0RFU1RCTEVORCwgRDNEQkxFTkRfREVTVEFMUEhBKTsKfQoKdm9pZCBDU25vd0Vudmlyb25tZW50OjpfX0FwcGx5Qmx1cigpCnsKCWlmICghbV9iQmx1ckVuYWJsZSkKCQlyZXR1cm47CgovLwkJCXsKLy8JCQkJU1RBVEVNQU5BR0VSLlNldFJlbmRlclN0YXRlKCBEM0RSU19BTFBIQUJMRU5ERU5BQkxFLCAgIFRSVUUgKTsKLy8JCQkJU1RBVEVNQU5BR0VSLlNldFJlbmRlclN0YXRlKCBEM0RSU19TUkNCTEVORCwgIEQzREJMRU5EX1NSQ0FMUEhBICk7Ci8vCQkJCVNUQVRFTUFOQUdFUi5TZXRSZW5kZXJTdGF0ZSggRDNEUlNfREVTVEJMRU5ELCBEM0RCTEVORF9JTlZTUkNBTFBIQSApOwovLwkJCQlTVEFURU1BTkFHRVIuU2V0UmVuZGVyU3RhdGUoIEQzRFJTX0NPTE9SVkVSVEVYICxUUlVFKTsKLy8JCQkJU1RBVEVNQU5BR0VSLlNldFJlbmRlclN0YXRlKCBEM0RSU19ESUZGVVNFTUFURVJJQUxTT1VSQ0UgLCBEM0RNQ1NfQ09MT1IxICk7Ci8vCQkJCVNUQVRFTUFOQUdFUi5TZXRUZXh0dXJlU3RhZ2VTdGF0ZSgwLCBEM0RUU1NfQ09MT1JPUCwgRDNEVE9QX01PRFVMQVRFKTsKLy8JCQkJU1RBVEVNQU5BR0VSLlNldFRleHR1cmVTdGFnZVN0YXRlKDAsIEQzRFRTU19DT0xPUkFSRzEsIEQzRFRBX1RFWFRVUkUpOwovLwkJCQlTVEFURU1BTkFHRVIuU2V0VGV4dHVyZVN0YWdlU3RhdGUoMCwgRDNEVFNTX0NPTE9SQVJHMiwgRDNEVEFfRElGRlVTRSk7Ci8vCQkJCVNUQVRFTUFOQUdFUi5TZXRUZXh0dXJlU3RhZ2VTdGF0ZSgwLCBEM0RUU1NfQUxQSEFPUCwgRDNEVE9QX01PRFVMQVRFKTsKLy8JCQkJU1RBVEVNQU5BR0VSLlNldFRleHR1cmVTdGFnZVN0YXRlKDAsIEQzRFRTU19BTFBIQUFSRzEsIEQzRFRBX1RFWFRVUkUpOwovLwkJCQlTVEFURU1BTkFHRVIuU2V0VGV4dHVyZVN0YWdlU3RhdGUoMCwgIEQzRFRTU19BTFBIQUFSRzIsIEQzRFRBX0RJRkZVU0UpOwovLwkJCQlEV09SRAlhbHBoYUNvbG9yID0gMHhGRkZGRkYgfCAoKERXT1JEKSgwLjZmKjI1NS4wZikgPDwgMjQpOwovLwovLwkJCQlCbHVyVmVydGV4IFZbNF0gPSB7IEJsdXJWZXJ0ZXgoRDNEWFZFQ1RPUjMoMC4wZiwwLjBmLDAuMGYpLDEuMGYsCQlhbHBoYUNvbG9yLCAwLDApICwKLy8JCQkJCQkJCQlCbHVyVmVydGV4KEQzRFhWRUNUT1IzKHdUZXh0dXJlU2l6ZSwwLjBmLDAuMGYpLDEuMGYsCQlhbHBoYUNvbG9yLCAxLDApICwgCi8vCQkJCQkJCQkJQmx1clZlcnRleChEM0RYVkVDVE9SMygwLjBmLHdUZXh0dXJlU2l6ZSwwLjBmKSwxLjBmLAkJYWxwaGFDb2xvciwgMCwxKSAsIAovLwkJCQkJCQkJCUJsdXJWZXJ0ZXgoRDNEWFZFQ1RPUjMod1RleHR1cmVTaXplLHdUZXh0dXJlU2l6ZSwwLjBmKSwxLjBmLAlhbHBoYUNvbG9yLCAxLDEpIH07Ci8vCQkJCS8v64iE7KCBIOu4lOufrCDthY3siqTss5Drpbwg7LCN64qU64ukLgovLwkJCQlTVEFURU1BTkFHRVIuU2V0VGV4dHVyZSgwLG1fbHBBY2N1bVRleHR1cmUpOwovLwkJCQlTVEFURU1BTkFHRVIuU2V0RlZGKCBEM0RGVkZfWFlaUkhXIHwgRDNERlZGX0RJRkZVU0V8RDNERlZGX1RFWDEgKTsKLy8JCQkJU1RBVEVNQU5BR0VSLkRyYXdQcmltaXRpdmVVUChEM0RQVF9UUklBTkdMRVNUUklQLDIsVixzaXplb2YoQmx1clZlcnRleCkpOwovLwkJCX0KLy8KLy8JCQl7Ci8vCQkJCVNUQVRFTUFOQUdFUi5TZXRSZW5kZXJUYXJnZXQobV9scEFjY3VtUmVuZGVyVGFyZ2V0U3VyZmFjZSwgbV9scEFjY3VtRGVwdGhTdXJmYWNlKTsKLy8KLy8JCQkJQmx1clZlcnRleCBWWzRdID0geyBCbHVyVmVydGV4KEQzRFhWRUNUT1IzKDAuMGYsMC4wZiwwLjBmKSwxLjBmLAkJMHhGRkZGRkYsIDAsMCkgLAovLwkJCQkJCQkJCUJsdXJWZXJ0ZXgoRDNEWFZFQ1RPUjMod1RleHR1cmVTaXplLDAuMGYsMC4wZiksMS4wZiwJCTB4RkZGRkZGLCAxLDApICwgCi8vCQkJCQkJCQkJQmx1clZlcnRleChEM0RYVkVDVE9SMygwLjBmLHdUZXh0dXJlU2l6ZSwwLjBmKSwxLjBmLAkJMHhGRkZGRkYsIDAsMSkgLCAKLy8JCQkJCQkJCQlCbHVyVmVydGV4KEQzRFhWRUNUT1IzKHdUZXh0dXJlU2l6ZSx3VGV4dHVyZVNpemUsMC4wZiksMS4wZiwJMHhGRkZGRkYsIDEsMSkgfTsKLy8KLy8JCQkJU1RBVEVNQU5BR0VSLlNldFRleHR1cmUoMCxtX2xwU25vd1RleHR1cmUpOwovLwkJCQlTVEFURU1BTkFHRVIuU2V0UmVuZGVyU3RhdGUoIEQzRFJTX0FMUEhBQkxFTkRFTkFCTEUsICAgRkFMU0UpOwovLwkJCQlTVEFURU1BTkFHRVIuU2V0RlZGKCBEM0RGVkZfWFlaUkhXIHwgRDNERlZGX0RJRkZVU0V8RDNERlZGX1RFWDEgKTsKLy8JCQkJU1RBVEVNQU5BR0VSLkRyYXdQcmltaXRpdmVVUChEM0RQVF9UUklBTkdMRVNUUklQLDIsVixzaXplb2YoQmx1clZlcnRleCkpOwovLwkJCX0KCgkvLy8vLy8vLy8vLy8vLy8KCXsKCQltc19scGQzZERldmljZS0+U2V0RGVwdGhTdGVuY2lsU3VyZmFjZShtX2xwT2xkRGVwdGhTdGVuY2lsU3VyZmFjZSk7CgkJbXNfbHBkM2REZXZpY2UtPlNldFJlbmRlclRhcmdldCgwLCBtX2xwT2xkU3VyZmFjZSk7CgoJCVNUQVRFTUFOQUdFUi5TZXRUZXh0dXJlKDAsbV9scFNub3dUZXh0dXJlKTsKCQlTVEFURU1BTkFHRVIuU2V0UmVuZGVyU3RhdGUoIEQzRFJTX0FMUEhBQkxFTkRFTkFCTEUsICAgVFJVRSk7CgoJCUQzRFNVUkZBQ0VfREVTQwlkZXNjOwoJCW1fbHBPbGRTdXJmYWNlLT5HZXREZXNjKCZkZXNjKTsKCQlmbG9hdCBzeCA9IChmbG9hdClkZXNjLldpZHRoIDsKCQlmbG9hdCBzeSA9IChmbG9hdClkZXNjLkhlaWdodDsKCQlTQUZFX1JFTEVBU0UoIG1fbHBPbGRTdXJmYWNlICk7CgkJU0FGRV9SRUxFQVNFKCBtX2xwT2xkRGVwdGhTdGVuY2lsU3VyZmFjZSApOwoKCQlCbHVyVmVydGV4IFZbNF0gPSB7CUJsdXJWZXJ0ZXgoRDNEWFZFQ1RPUjMoMC4wZiwwLjBmLDAuMGYpLDEuMGYJLDB4RkZGRkZGLCAwLDApICwKCQkJCQkJCUJsdXJWZXJ0ZXgoRDNEWFZFQ1RPUjMoc3gsMC4wZiwwLjBmKSwxLjBmCSwweEZGRkZGRiwgMSwwKSAsIAoJCQkJCQkJQmx1clZlcnRleChEM0RYVkVDVE9SMygwLjBmLHN5LDAuMGYpLDEuMGYJLDB4RkZGRkZGLCAwLDEpICwgCgkJCQkJCQlCbHVyVmVydGV4KEQzRFhWRUNUT1IzKHN4LHN5LDAuMGYpLDEuMGYJCSwweEZGRkZGRiwgMSwxKSB9OwoKCQlTVEFURU1BTkFHRVIuU2V0RlZGKCBEM0RGVkZfWFlaUkhXIHwgRDNERlZGX0RJRkZVU0V8RDNERlZGX1RFWDEgKTsKCQlTVEFURU1BTkFHRVIuRHJhd1ByaW1pdGl2ZVVQKEQzRFBUX1RSSUFOR0xFU1RSSVAsMixWLHNpemVvZihCbHVyVmVydGV4KSk7Cgl9Cn0KCnZvaWQgQ1Nub3dFbnZpcm9ubWVudDo6UmVuZGVyKCkKewoJaWYgKCFtX2JTbm93RW5hYmxlKQoJewoJCWlmIChtX2tWY3RfcGtQYXJ0aWNsZVNub3cuZW1wdHkoKSkKCQkJcmV0dXJuOwoJfQoKCV9fQmVnaW5CbHVyKCk7CgoJRFdPUkQgZHdQYXJ0aWNsZUNvdW50ID0gc3RkOjptaW4oKHNpemVfdCltX2R3UGFydGljbGVNYXhOdW0sIG1fa1ZjdF9wa1BhcnRpY2xlU25vdy5zaXplKCkpOwoKCUNDYW1lcmEgKiBwQ2FtZXJhID0gQ0NhbWVyYU1hbmFnZXI6Okluc3RhbmNlKCkuR2V0Q3VycmVudENhbWVyYSgpOwoJaWYgKCFwQ2FtZXJhKQoJCXJldHVybjsKCgljb25zdCBEM0RYVkVDVE9SMyAmIGNfcnYzVXAgPSBwQ2FtZXJhLT5HZXRVcCgpOwoJY29uc3QgRDNEWFZFQ1RPUjMgJiBjX3J2M0Nyb3NzID0gcENhbWVyYS0+R2V0Q3Jvc3MoKTsKCglTUGFydGljbGVWZXJ0ZXggKiBwdjNWZXJ0aWNpZXM7CglpZiAoU1VDQ0VFREVEKG1fcFZCLT5Mb2NrKDAsIHNpemVvZihTUGFydGljbGVWZXJ0ZXgpKmR3UGFydGljbGVDb3VudCo0LCAodm9pZCAqKikgJnB2M1ZlcnRpY2llcywgRDNETE9DS19ESVNDQVJEKSkpCgl7CgkJaW50IGkgPSAwOwoJCXN0ZDo6dmVjdG9yPENTbm93UGFydGljbGUqPjo6aXRlcmF0b3IgaXRvciA9IG1fa1ZjdF9wa1BhcnRpY2xlU25vdy5iZWdpbigpOwoJCWZvciAoOyBpIDwgZHdQYXJ0aWNsZUNvdW50ICYmIGl0b3IgIT0gbV9rVmN0X3BrUGFydGljbGVTbm93LmVuZCgpOyArK2ksICsraXRvcikKCQl7CgkJCUNTbm93UGFydGljbGUgKiBwU25vdyA9ICppdG9yOwoJCQlwU25vdy0+U2V0Q2FtZXJhVmVydGV4KGNfcnYzVXAsIGNfcnYzQ3Jvc3MpOwoJCQlwU25vdy0+R2V0VmVydGljaWVzKHB2M1ZlcnRpY2llc1tpKjQrMF0sCgkJCQkJCQkJcHYzVmVydGljaWVzW2kqNCsxXSwKCQkJCQkJCQlwdjNWZXJ0aWNpZXNbaSo0KzJdLAoJCQkJCQkJCXB2M1ZlcnRpY2llc1tpKjQrM10pOwoJCX0KCQltX3BWQi0+VW5sb2NrKCk7Cgl9CgoJU1RBVEVNQU5BR0VSLlNhdmVSZW5kZXJTdGF0ZShEM0RSU19aV1JJVEVFTkFCTEUsIEZBTFNFKTsKCVNUQVRFTUFOQUdFUi5TYXZlUmVuZGVyU3RhdGUoRDNEUlNfQUxQSEFCTEVOREVOQUJMRSwgVFJVRSk7CglTVEFURU1BTkFHRVIuU2F2ZVJlbmRlclN0YXRlKEQzRFJTX0NVTExNT0RFLCBEM0RDVUxMX05PTkUpOwoJU1RBVEVNQU5BR0VSLlNldFJlbmRlclN0YXRlKEQzRFJTX1NSQ0JMRU5ELCAgRDNEQkxFTkRfU1JDQUxQSEEpOwoJU1RBVEVNQU5BR0VSLlNldFJlbmRlclN0YXRlKEQzRFJTX0RFU1RCTEVORCwgRDNEQkxFTkRfSU5WU1JDQUxQSEEpOwoJU1RBVEVNQU5BR0VSLlNldFRleHR1cmVTdGFnZVN0YXRlKDAsIEQzRFRTU19DT0xPUkFSRzEsIEQzRFRBX1RFWFRVUkUpOwoJU1RBVEVNQU5BR0VSLlNldFRleHR1cmVTdGFnZVN0YXRlKDAsIEQzRFRTU19DT0xPUk9QLCBEM0RUT1BfU0VMRUNUQVJHMSk7CglTVEFURU1BTkFHRVIuU2V0VGV4dHVyZVN0YWdlU3RhdGUoMCwgRDNEVFNTX0FMUEhBQVJHMSwgRDNEVEFfVEVYVFVSRSk7CglTVEFURU1BTkFHRVIuU2V0VGV4dHVyZVN0YWdlU3RhdGUoMCwgRDNEVFNTX0FMUEhBT1AsIEQzRFRPUF9TRUxFQ1RBUkcxKTsKCVNUQVRFTUFOQUdFUi5TZXRUZXh0dXJlKDEsIE5VTEwpOwoJU1RBVEVNQU5BR0VSLlNldFRleHR1cmVTdGFnZVN0YXRlKDEsIEQzRFRTU19DT0xPUk9QLCBEM0RUT1BfRElTQUJMRSk7CglTVEFURU1BTkFHRVIuU2V0VGV4dHVyZVN0YWdlU3RhdGUoMSwgRDNEVFNTX0FMUEhBT1AsIEQzRFRPUF9ESVNBQkxFKTsKCgltX3BJbWFnZUluc3RhbmNlLT5HZXRHcmFwaGljSW1hZ2VQb2ludGVyKCktPkdldFRleHR1cmVSZWZlcmVuY2UoKS5TZXRUZXh0dXJlU3RhZ2UoMCk7CglTVEFURU1BTkFHRVIuU2V0SW5kaWNlcyhtX3BJQiwgMCk7CglTVEFURU1BTkFHRVIuU2V0U3RyZWFtU291cmNlKDAsIG1fcFZCLCBzaXplb2YoU1BhcnRpY2xlVmVydGV4KSk7CglTVEFURU1BTkFHRVIuU2V0RlZGKEQzREZWRl9YWVogfCBEM0RGVkZfVEVYMSk7CglTVEFURU1BTkFHRVIuRHJhd0luZGV4ZWRQcmltaXRpdmUoRDNEUFRfVFJJQU5HTEVMSVNULCAwLCBkd1BhcnRpY2xlQ291bnQqNCwgMCwgZHdQYXJ0aWNsZUNvdW50KjIpOwoJU1RBVEVNQU5BR0VSLlJlc3RvcmVSZW5kZXJTdGF0ZShEM0RSU19BTFBIQUJMRU5ERU5BQkxFKTsKCVNUQVRFTUFOQUdFUi5SZXN0b3JlUmVuZGVyU3RhdGUoRDNEUlNfWldSSVRFRU5BQkxFKTsKCVNUQVRFTUFOQUdFUi5SZXN0b3JlUmVuZGVyU3RhdGUoRDNEUlNfQ1VMTE1PREUpOwoKCV9fQXBwbHlCbHVyKCk7Cn0KCmJvb2wgQ1Nub3dFbnZpcm9ubWVudDo6X19DcmVhdGVCbHVyVGV4dHVyZSgpCnsKCWlmICghbV9iQmx1ckVuYWJsZSkKCQlyZXR1cm4gdHJ1ZTsKCglpZiAoRkFJTEVEKG1zX2xwZDNkRGV2aWNlLT5DcmVhdGVUZXh0dXJlKG1fd0JsdXJUZXh0dXJlU2l6ZSwgbV93Qmx1clRleHR1cmVTaXplLCAxLCBEM0RVU0FHRV9SRU5ERVJUQVJHRVQsIEQzREZNVF9YOFI4RzhCOCwgRDNEUE9PTF9ERUZBVUxULCAmbV9scFNub3dUZXh0dXJlLCBudWxscHRyKSkpCgkJcmV0dXJuIGZhbHNlOwoJaWYgKEZBSUxFRChtX2xwU25vd1RleHR1cmUtPkdldFN1cmZhY2VMZXZlbCgwLCAmbV9scFNub3dSZW5kZXJUYXJnZXRTdXJmYWNlKSkpCgkJcmV0dXJuIGZhbHNlOwoJaWYgKEZBSUxFRChtc19scGQzZERldmljZS0+Q3JlYXRlRGVwdGhTdGVuY2lsU3VyZmFjZShtX3dCbHVyVGV4dHVyZVNpemUsIG1fd0JsdXJUZXh0dXJlU2l6ZSwgRDNERk1UX0QxNiwgRDNETVVMVElTQU1QTEVfTk9ORSwgMCwgVFJVRSwgJm1fbHBTbm93RGVwdGhTdXJmYWNlLCBudWxscHRyKSkpCgkJcmV0dXJuIGZhbHNlOwoKCWlmIChGQUlMRUQobXNfbHBkM2REZXZpY2UtPkNyZWF0ZVRleHR1cmUobV93Qmx1clRleHR1cmVTaXplLCBtX3dCbHVyVGV4dHVyZVNpemUsIDEsIEQzRFVTQUdFX1JFTkRFUlRBUkdFVCwgRDNERk1UX1g4UjhHOEI4LCBEM0RQT09MX0RFRkFVTFQsICZtX2xwQWNjdW1UZXh0dXJlLCBudWxscHRyKSkpCgkJcmV0dXJuIGZhbHNlOwoJaWYgKEZBSUxFRChtX2xwQWNjdW1UZXh0dXJlLT5HZXRTdXJmYWNlTGV2ZWwoMCwgJm1fbHBBY2N1bVJlbmRlclRhcmdldFN1cmZhY2UpKSkKCQlyZXR1cm4gZmFsc2U7CglpZiAoRkFJTEVEKG1zX2xwZDNkRGV2aWNlLT5DcmVhdGVEZXB0aFN0ZW5jaWxTdXJmYWNlKG1fd0JsdXJUZXh0dXJlU2l6ZSwgbV93Qmx1clRleHR1cmVTaXplLCBEM0RGTVRfRDE2LCBEM0RNVUxUSVNBTVBMRV9OT05FLCAwLCBUUlVFLCAmbV9scEFjY3VtRGVwdGhTdXJmYWNlLCBudWxscHRyKSkpCgkJcmV0dXJuIGZhbHNlOwoKCXJldHVybiB0cnVlOwp9Cgpib29sIENTbm93RW52aXJvbm1lbnQ6Ol9fQ3JlYXRlR2VvbWV0cnkoKQp7CglpZiAoRkFJTEVEKG1zX2xwZDNkRGV2aWNlLT5DcmVhdGVWZXJ0ZXhCdWZmZXIoc2l6ZW9mKFNQYXJ0aWNsZVZlcnRleCkgKiBtX2R3UGFydGljbGVNYXhOdW0gKiA0LAoJCUQzRFVTQUdFX0RZTkFNSUMgfCBEM0RVU0FHRV9XUklURU9OTFksCgkJRDNERlZGX1hZWiB8IEQzREZWRl9URVgxLAoJCUQzRFBPT0xfREVGQVVMVCwKCQkmbV9wVkIsIG51bGxwdHIpKSkKCQlyZXR1cm4gZmFsc2U7CgoJaWYgKEZBSUxFRChtc19scGQzZERldmljZS0+Q3JlYXRlSW5kZXhCdWZmZXIoc2l6ZW9mKFdPUkQpICogbV9kd1BhcnRpY2xlTWF4TnVtICogNiwKCQlEM0RVU0FHRV9EWU5BTUlDLAoJCUQzREZNVF9JTkRFWDE2LAoJCUQzRFBPT0xfREVGQVVMVCwKCQkmbV9wSUIsIG51bGxwdHIpKSkKCQlyZXR1cm4gZmFsc2U7CgoJV09SRCogZHN0SW5kaWNlczsKCWlmIChGQUlMRUQobV9wSUItPkxvY2soMCwgc2l6ZW9mKFdPUkQpICogbV9kd1BhcnRpY2xlTWF4TnVtICogNiwgKHZvaWQqKikmZHN0SW5kaWNlcywgMCkpKQoJCXJldHVybiBmYWxzZTsKCgljb25zdCBXT1JEIGNfYXdGaWxsUmVjdEluZGljZXNbNl0gPSB7IDAsIDIsIDEsIDIsIDMsIDEsIH07Cglmb3IgKGludCBpID0gMDsgaSA8IG1fZHdQYXJ0aWNsZU1heE51bTsgKytpKQoJewoJCWZvciAoaW50IGogPSAwOyBqIDwgNjsgKytqKQoJCXsKCQkJZHN0SW5kaWNlc1tpKjYgKyBqXSA9IGkqNCArIGNfYXdGaWxsUmVjdEluZGljZXNbal07CgkJfQoJfQoKCW1fcElCLT5VbmxvY2soKTsKCXJldHVybiB0cnVlOwp9Cgpib29sIENTbm93RW52aXJvbm1lbnQ6OkNyZWF0ZSgpCnsKCURlc3Ryb3koKTsKCglpZiAoIV9fQ3JlYXRlQmx1clRleHR1cmUoKSkKCQlyZXR1cm4gZmFsc2U7CgoJaWYgKCFfX0NyZWF0ZUdlb21ldHJ5KCkpCgkJcmV0dXJuIGZhbHNlOwoKCUNHcmFwaGljSW1hZ2UgKiBwSW1hZ2UgPSAoQ0dyYXBoaWNJbWFnZSAqKUNSZXNvdXJjZU1hbmFnZXI6Okluc3RhbmNlKCkuR2V0UmVzb3VyY2VQb2ludGVyKCJkOi95bWlyIHdvcmsvc3BlY2lhbC9zbm93LmRkcyIpOwoJbV9wSW1hZ2VJbnN0YW5jZSA9IENHcmFwaGljSW1hZ2VJbnN0YW5jZTo6TmV3KCk7CgltX3BJbWFnZUluc3RhbmNlLT5TZXRJbWFnZVBvaW50ZXIocEltYWdlKTsKCglyZXR1cm4gdHJ1ZTsKfQoKdm9pZCBDU25vd0Vudmlyb25tZW50OjpEZXN0cm95KCkKewoJU0FGRV9SRUxFQVNFKG1fbHBTbm93VGV4dHVyZSk7CglTQUZFX1JFTEVBU0UobV9scFNub3dSZW5kZXJUYXJnZXRTdXJmYWNlKTsKCVNBRkVfUkVMRUFTRShtX2xwU25vd0RlcHRoU3VyZmFjZSk7CglTQUZFX1JFTEVBU0UobV9scEFjY3VtVGV4dHVyZSk7CglTQUZFX1JFTEVBU0UobV9scEFjY3VtUmVuZGVyVGFyZ2V0U3VyZmFjZSk7CglTQUZFX1JFTEVBU0UobV9scEFjY3VtRGVwdGhTdXJmYWNlKTsKCVNBRkVfUkVMRUFTRShtX3BWQik7CglTQUZFX1JFTEVBU0UobV9wSUIpOwoKCXN0bF93aXBlKG1fa1ZjdF9wa1BhcnRpY2xlU25vdyk7CglDU25vd1BhcnRpY2xlOjpEZXN0cm95UG9vbCgpOwoKCWlmIChtX3BJbWFnZUluc3RhbmNlKQoJewoJCUNHcmFwaGljSW1hZ2VJbnN0YW5jZTo6RGVsZXRlKG1fcEltYWdlSW5zdGFuY2UpOwoJCW1fcEltYWdlSW5zdGFuY2UgPSBOVUxMOwoJfQoKCV9fSW5pdGlhbGl6ZSgpOwp9Cgp2b2lkIENTbm93RW52aXJvbm1lbnQ6Ol9fSW5pdGlhbGl6ZSgpCnsKCW1fYlNub3dFbmFibGUgPSBGQUxTRTsKCW1fbHBTbm93VGV4dHVyZSA9IE5VTEw7CgltX2xwU25vd1JlbmRlclRhcmdldFN1cmZhY2UgPSBOVUxMOwoJbV9scFNub3dEZXB0aFN1cmZhY2UgPSBOVUxMOwoJbV9scEFjY3VtVGV4dHVyZSA9IE5VTEw7CgltX2xwQWNjdW1SZW5kZXJUYXJnZXRTdXJmYWNlID0gTlVMTDsKCW1fbHBBY2N1bURlcHRoU3VyZmFjZSA9IE5VTEw7CgltX3BWQiA9IE5VTEw7CgltX3BJQiA9IE5VTEw7CgltX3BJbWFnZUluc3RhbmNlID0gTlVMTDsKCgltX2tWY3RfcGtQYXJ0aWNsZVNub3cucmVzZXJ2ZShtX2R3UGFydGljbGVNYXhOdW0pOwp9CgpDU25vd0Vudmlyb25tZW50OjpDU25vd0Vudmlyb25tZW50KCkKewoJbV9iQmx1ckVuYWJsZSA9IEZBTFNFOwoJbV9kd1BhcnRpY2xlTWF4TnVtID0gMzAwMDsKCW1fd0JsdXJUZXh0dXJlU2l6ZSA9IDUxMjsKCglfX0luaXRpYWxpemUoKTsKfQpDU25vd0Vudmlyb25tZW50Ojp+Q1Nub3dFbnZpcm9ubWVudCgpCnsKCURlc3Ryb3koKTsKfQo=", "after": "I2luY2x1ZGUgIlN0ZEFmeC5oIg0KI2luY2x1ZGUgIlNub3dFbnZpcm9ubWVudC5oIg0KDQojaW5jbHVkZSAiRXRlckxpYi9HcnBJbWFnZUluc3RhbmNlLmgiDQojaW5jbHVkZSAiRXRlckxpYi9TdGF0ZU1hbmFnZXIuaCINCiNpbmNsdWRlICJFdGVyTGliL0NhbWVyYS5oIg0KI2luY2x1ZGUgIkV0ZXJMaWIvUmVzb3VyY2VNYW5hZ2VyLmgiDQojaW5jbHVkZSAiU25vd1BhcnRpY2xlLmgiDQojaW5jbHVkZSAiRXRlckxpYi9HcmFwaGljc1N0YXJ0dXAuaCINCiNpbmNsdWRlICJFdGVyTGliL1JlbmRlclRhcmdldEJpbmRpbmcuaCINCiNpbmNsdWRlICJFdGVyTGliL0dlb21ldHJ5QnVmZmVyVXBsb2FkLmgiDQoNCnZvaWQgQ1Nub3dFbnZpcm9ubWVudDo6RW5hYmxlKCkNCnsNCglpZiAobV9iU25vd0VuYWJsZSkgcmV0dXJuOw0KCWlmICghQ3JlYXRlKCkpDQoJew0KCQlUcmFjZUVycm9yKCJHcmFwaGljczogc25vdyBjcmVhdGlvbiBmYWlsZWQ7IGVmZmVjdCByZW1haW5zIGRpc2FibGVkIik7DQoJCXJldHVybjsNCgl9DQoJbV9iU25vd0VuYWJsZSA9IFRSVUU7DQp9DQoNCnZvaWQgQ1Nub3dFbnZpcm9ubWVudDo6RGlzYWJsZSgpDQp7DQoJbV9iU25vd0VuYWJsZSA9IEZBTFNFOw0KfQ0KDQp2b2lkIENTbm93RW52aXJvbm1lbnQ6OlVwZGF0ZShjb25zdCBEM0RYVkVDVE9SMyAmIGNfcnYzUG9zKQ0Kew0KCWlmICghbV9iU25vd0VuYWJsZSkNCgl7DQoJCWlmIChtX2tWY3RfcGtQYXJ0aWNsZVNub3cuZW1wdHkoKSkNCgkJCXJldHVybjsNCgl9DQoNCgltX3YzQ2VudGVyPWNfcnYzUG9zOw0KfQ0KDQp2b2lkIENTbm93RW52aXJvbm1lbnQ6OkRlZm9ybSgpDQp7DQoJaWYgKCFtX2JTbm93RW5hYmxlKQ0KCXsNCgkJaWYgKG1fa1ZjdF9wa1BhcnRpY2xlU25vdy5lbXB0eSgpKQ0KCQkJcmV0dXJuOw0KCX0NCg0KCWNvbnN0IEQzRFhWRUNUT1IzICYgY19ydjNQb3M9bV92M0NlbnRlcjsNCgkNCglzdGF0aWMgbG9uZyBzX2xMYXN0VGltZSA9IENUaW1lcjo6SW5zdGFuY2UoKS5HZXRDdXJyZW50TWlsbGlzZWNvbmQoKTsNCglsb25nIGxjdXJUaW1lID0gQ1RpbWVyOjpJbnN0YW5jZSgpLkdldEN1cnJlbnRNaWxsaXNlY29uZCgpOw0KCWZsb2F0IGZFbGFwc2VkVGltZSA9IGZsb2F0KGxjdXJUaW1lIC0gc19sTGFzdFRpbWUpIC8gMTAwMC4wZjsNCglzX2xMYXN0VGltZSA9IGxjdXJUaW1lOw0KDQoJQ0NhbWVyYSAqIHBDYW1lcmEgPSBDQ2FtZXJhTWFuYWdlcjo6SW5zdGFuY2UoKS5HZXRDdXJyZW50Q2FtZXJhKCk7DQoJaWYgKCFwQ2FtZXJhKQ0KCQlyZXR1cm47DQoNCgljb25zdCBEM0RYVkVDVE9SMyAmIGNfcnYzVmlldyA9IHBDYW1lcmEtPkdldFZpZXcoKTsNCg0KCUQzRFhWRUNUT1IzIHYzQ2hhbmdlZFBvcyA9IGNfcnYzVmlldyAqIDM1MDAuMGYgKyBjX3J2M1BvczsNCgl2M0NoYW5nZWRQb3MueiA9IGNfcnYzUG9zLno7DQoNCglzdGQ6OnZlY3RvcjxDU25vd1BhcnRpY2xlKj46Oml0ZXJhdG9yIGl0b3IgPSBtX2tWY3RfcGtQYXJ0aWNsZVNub3cuYmVnaW4oKTsNCglmb3IgKDsgaXRvciAhPSBtX2tWY3RfcGtQYXJ0aWNsZVNub3cuZW5kKCk7KQ0KCXsNCgkJQ1Nub3dQYXJ0aWNsZSAqIHBTbm93ID0gKml0b3I7DQoJCXBTbm93LT5VcGRhdGUoZkVsYXBzZWRUaW1lLCB2M0NoYW5nZWRQb3MpOw0KDQoJCWlmICghcFNub3ctPklzQWN0aXZhdGUoKSkNCgkJew0KCQkJQ1Nub3dQYXJ0aWNsZTo6RGVsZXRlKHBTbm93KTsNCg0KCQkJaXRvciA9IG1fa1ZjdF9wa1BhcnRpY2xlU25vdy5lcmFzZShpdG9yKTsNCgkJfQ0KCQllbHNlDQoJCXsNCgkJCSsraXRvcjsNCgkJfQ0KCX0NCg0KCWlmIChtX2JTbm93RW5hYmxlKQ0KCXsNCgkJY29uc3Qgc2l6ZV90IGF2YWlsYWJsZSA9IG1fa1ZjdF9wa1BhcnRpY2xlU25vdy5zaXplKCkgPCBtX2R3UGFydGljbGVNYXhOdW0gPyBtX2R3UGFydGljbGVNYXhOdW0gLSBtX2tWY3RfcGtQYXJ0aWNsZVNub3cuc2l6ZSgpIDogMDsNCgkJZm9yIChzaXplX3QgcCA9IDA7IHAgPCAoc3RkOjptaW4pKHNpemVfdCgxMCksIGF2YWlsYWJsZSAtIHApOyArK3ApDQoJCXsNCgkJCUNTbm93UGFydGljbGUgKiBwU25vd1BhcnRpY2xlID0gQ1Nub3dQYXJ0aWNsZTo6TmV3KCk7DQoJCQlwU25vd1BhcnRpY2xlLT5Jbml0KHYzQ2hhbmdlZFBvcyk7DQoJCQltX2tWY3RfcGtQYXJ0aWNsZVNub3cucHVzaF9iYWNrKHBTbm93UGFydGljbGUpOw0KCQl9DQoJfQ0KfQ0KDQpib29sIENTbm93RW52aXJvbm1lbnQ6OlJlbmRlcigpDQp7DQoJaWYgKENHcmFwaGljc1Jlc3RvcmVTdGF0dXM6Okluc3RhbmNlKCkuSXNCbG9ja2VkKCkpIHJldHVybiBmYWxzZTsNCglpZiAoIW1fYlNub3dFbmFibGUpDQoJew0KCQlpZiAobV9rVmN0X3BrUGFydGljbGVTbm93LmVtcHR5KCkpDQoJCQlyZXR1cm4gZmFsc2U7DQoJfQ0KDQoJY29uc3QgRFdPUkQgZHdQYXJ0aWNsZUNvdW50ID0gc3RhdGljX2Nhc3Q8RFdPUkQ+KChzdGQ6Om1pbikoc3RhdGljX2Nhc3Q8c2l6ZV90PihtX2R3UGFydGljbGVNYXhOdW0pLCBtX2tWY3RfcGtQYXJ0aWNsZVNub3cuc2l6ZSgpKSk7DQoJaWYgKCFkd1BhcnRpY2xlQ291bnQgfHwgIW1fcFZCIHx8ICFtX3BJQiB8fCAhbV9wSW1hZ2VJbnN0YW5jZSB8fCBtX3BJbWFnZUluc3RhbmNlLT5Jc0VtcHR5KCkpIHJldHVybiBmYWxzZTsNCglpZiAoIW1fcEltYWdlSW5zdGFuY2UtPkdldEdyYXBoaWNJbWFnZVBvaW50ZXIoKS0+R2V0VGV4dHVyZVJlZmVyZW5jZSgpLkdldEQzRFRleHR1cmUoKSkgcmV0dXJuIGZhbHNlOw0KDQoJQ0NhbWVyYSAqIHBDYW1lcmEgPSBDQ2FtZXJhTWFuYWdlcjo6SW5zdGFuY2UoKS5HZXRDdXJyZW50Q2FtZXJhKCk7DQoJaWYgKCFwQ2FtZXJhKQ0KCQlyZXR1cm4gZmFsc2U7DQoNCgljb25zdCBEM0RYVkVDVE9SMyAmIGNfcnYzVXAgPSBwQ2FtZXJhLT5HZXRVcCgpOw0KCWNvbnN0IEQzRFhWRUNUT1IzICYgY19ydjNDcm9zcyA9IHBDYW1lcmEtPkdldENyb3NzKCk7DQoNCglTUGFydGljbGVWZXJ0ZXggKiBwdjNWZXJ0aWNpZXMgPSBudWxscHRyOw0KCWlmIChHZW9tZXRyeUJ1ZmZlclVwbG9hZDo6TG9jayhtX3BWQiwgc2l6ZW9mKFNQYXJ0aWNsZVZlcnRleCkqZHdQYXJ0aWNsZUNvdW50KjQsICh2b2lkKiopJnB2M1ZlcnRpY2llcywgRDNETE9DS19ESVNDQVJEKSkNCgl7DQoJCWludCBpID0gMDsNCgkJc3RkOjp2ZWN0b3I8Q1Nub3dQYXJ0aWNsZSo+OjppdGVyYXRvciBpdG9yID0gbV9rVmN0X3BrUGFydGljbGVTbm93LmJlZ2luKCk7DQoJCWZvciAoOyBpIDwgZHdQYXJ0aWNsZUNvdW50ICYmIGl0b3IgIT0gbV9rVmN0X3BrUGFydGljbGVTbm93LmVuZCgpOyArK2ksICsraXRvcikNCgkJew0KCQkJQ1Nub3dQYXJ0aWNsZSAqIHBTbm93ID0gKml0b3I7DQoJCQlwU25vdy0+U2V0Q2FtZXJhVmVydGV4KGNfcnYzVXAsIGNfcnYzQ3Jvc3MpOw0KCQkJcFNub3ctPkdldFZlcnRpY2llcyhwdjNWZXJ0aWNpZXNbaSo0KzBdLA0KCQkJCQkJCQlwdjNWZXJ0aWNpZXNbaSo0KzFdLA0KCQkJCQkJCQlwdjNWZXJ0aWNpZXNbaSo0KzJdLA0KCQkJCQkJCQlwdjNWZXJ0aWNpZXNbaSo0KzNdKTsNCgkJfQ0KCQlpZiAoRkFJTEVEKG1fcFZCLT5VbmxvY2soKSkpIHJldHVybiBmYWxzZTsNCgl9DQoJZWxzZSByZXR1cm4gZmFsc2U7IC8vIE5ldmVyIGRyYXcgc3RhbGUgZ2VvbWV0cnkgYWZ0ZXIgYSBmYWlsZWQgdXBsb2FkLg0KDQoJQ1N0YXRlTWFuYWdlcjo6U2NvcGVkU3RhdGUgZHJhd2luZ1N0YXRlKFNUQVRFTUFOQUdFUik7DQoJaWYgKCFkcmF3aW5nU3RhdGUuSXNWYWxpZCgpKSByZXR1cm4gZmFsc2U7DQoJQ1JlbmRlclRhcmdldEJpbmRpbmcgYmx1clRhcmdldDsgLy8gUmVzdG9yZXMgYmVmb3JlIGRyYXdpbmdTdGF0ZSBvbiBldmVyeSBleGl0Lg0KCUQzRFZJRVdQT1JUOSBvcmlnaW5hbFZpZXdwb3J0ID0ge307DQoJaWYgKG1fYkJsdXJFbmFibGUpDQoJew0KCQlpZiAoIW1fbHBTbm93VGV4dHVyZSB8fCAhbV9scFNub3dSZW5kZXJUYXJnZXRTdXJmYWNlIHx8ICFtX2xwU25vd0RlcHRoU3VyZmFjZSkgcmV0dXJuIGZhbHNlOw0KCQlpZiAoRkFJTEVEKG1zX2xwZDNkRGV2aWNlLT5HZXRWaWV3cG9ydCgmb3JpZ2luYWxWaWV3cG9ydCkpKSByZXR1cm4gZmFsc2U7DQoJCWNvbnN0IEQzRFZJRVdQT1JUOSB2aWV3cG9ydCA9IHswLCAwLCBtX3dCbHVyVGV4dHVyZVNpemUsIG1fd0JsdXJUZXh0dXJlU2l6ZSwgMC4wZiwgMS4wZn07DQoJCWlmIChGQUlMRUQoYmx1clRhcmdldC5CaW5kKG1zX2xwZDNkRGV2aWNlLCBtX2xwU25vd1JlbmRlclRhcmdldFN1cmZhY2UsIG1fbHBTbm93RGVwdGhTdXJmYWNlLCB2aWV3cG9ydCkpKSByZXR1cm4gZmFsc2U7DQoJCWlmIChGQUlMRUQobXNfbHBkM2REZXZpY2UtPkNsZWFyKDAsIG51bGxwdHIsIEQzRENMRUFSX1RBUkdFVCB8IEQzRENMRUFSX1pCVUZGRVIsIDAsIDEuMGYsIDApKSkgcmV0dXJuIGZhbHNlOw0KCX0NCg0KCWlmIChGQUlMRUQoU1RBVEVNQU5BR0VSLlNldFJlbmRlclN0YXRlKEQzRFJTX1pXUklURUVOQUJMRSwgRkFMU0UpKSkgcmV0dXJuIGZhbHNlOw0KCWlmIChGQUlMRUQoU1RBVEVNQU5BR0VSLlNldFJlbmRlclN0YXRlKEQzRFJTX0FMUEhBQkxFTkRFTkFCTEUsIFRSVUUpKSkgcmV0dXJuIGZhbHNlOw0KCWlmIChGQUlMRUQoU1RBVEVNQU5BR0VSLlNldFJlbmRlclN0YXRlKEQzRFJTX0NVTExNT0RFLCBEM0RDVUxMX05PTkUpKSkgcmV0dXJuIGZhbHNlOw0KCWlmIChGQUlMRUQoU1RBVEVNQU5BR0VSLlNldFJlbmRlclN0YXRlKEQzRFJTX1NSQ0JMRU5ELCAgRDNEQkxFTkRfU1JDQUxQSEEpKSkgcmV0dXJuIGZhbHNlOw0KCWlmIChGQUlMRUQoU1RBVEVNQU5BR0VSLlNldFJlbmRlclN0YXRlKEQzRFJTX0RFU1RCTEVORCwgRDNEQkxFTkRfSU5WU1JDQUxQSEEpKSkgcmV0dXJuIGZhbHNlOw0KCWlmIChGQUlMRUQoU1RBVEVNQU5BR0VSLlNldFRleHR1cmVTdGFnZVN0YXRlKDAsIEQzRFRTU19DT0xPUkFSRzEsIEQzRFRBX1RFWFRVUkUpKSkgcmV0dXJuIGZhbHNlOw0KCWlmIChGQUlMRUQoU1RBVEVNQU5BR0VSLlNldFRleHR1cmVTdGFnZVN0YXRlKDAsIEQzRFRTU19DT0xPUk9QLCBEM0RUT1BfU0VMRUNUQVJHMSkpKSByZXR1cm4gZmFsc2U7DQoJaWYgKEZBSUxFRChTVEFURU1BTkFHRVIuU2V0VGV4dHVyZVN0YWdlU3RhdGUoMCwgRDNEVFNTX0FMUEhBQVJHMSwgRDNEVEFfVEVYVFVSRSkpKSByZXR1cm4gZmFsc2U7DQoJaWYgKEZBSUxFRChTVEFURU1BTkFHRVIuU2V0VGV4dHVyZVN0YWdlU3RhdGUoMCwgRDNEVFNTX0FMUEhBT1AsIEQzRFRPUF9TRUxFQ1RBUkcxKSkpIHJldHVybiBmYWxzZTsNCglpZiAoRkFJTEVEKFNUQVRFTUFOQUdFUi5TZXRUZXh0dXJlKDEsIE5VTEwpKSkgcmV0dXJuIGZhbHNlOw0KCWlmIChGQUlMRUQoU1RBVEVNQU5BR0VSLlNldFRleHR1cmVTdGFnZVN0YXRlKDEsIEQzRFRTU19DT0xPUk9QLCBEM0RUT1BfRElTQUJMRSkpKSByZXR1cm4gZmFsc2U7DQoJaWYgKEZBSUxFRChTVEFURU1BTkFHRVIuU2V0VGV4dHVyZVN0YWdlU3RhdGUoMSwgRDNEVFNTX0FMUEhBT1AsIEQzRFRPUF9ESVNBQkxFKSkpIHJldHVybiBmYWxzZTsNCg0KCWlmIChGQUlMRUQoU1RBVEVNQU5BR0VSLlNldFRleHR1cmUoMCwgbV9wSW1hZ2VJbnN0YW5jZS0+R2V0R3JhcGhpY0ltYWdlUG9pbnRlcigpLT5HZXRUZXh0dXJlUmVmZXJlbmNlKCkuR2V0RDNEVGV4dHVyZSgpKSkpIHJldHVybiBmYWxzZTsNCglpZiAoRkFJTEVEKFNUQVRFTUFOQUdFUi5TZXRJbmRpY2VzKG1fcElCLCAwKSkpIHJldHVybiBmYWxzZTsNCglpZiAoRkFJTEVEKFNUQVRFTUFOQUdFUi5TZXRTdHJlYW1Tb3VyY2UoMCwgbV9wVkIsIHNpemVvZihTUGFydGljbGVWZXJ0ZXgpKSkpIHJldHVybiBmYWxzZTsNCglpZiAoRkFJTEVEKFNUQVRFTUFOQUdFUi5TZXRGVkYoRDNERlZGX1hZWiB8IEQzREZWRl9URVgxKSkpIHJldHVybiBmYWxzZTsNCglpZiAoRkFJTEVEKFNUQVRFTUFOQUdFUi5EcmF3SW5kZXhlZFByaW1pdGl2ZShEM0RQVF9UUklBTkdMRUxJU1QsIDAsIGR3UGFydGljbGVDb3VudCo0LCAwLCBkd1BhcnRpY2xlQ291bnQqMikpKSByZXR1cm4gZmFsc2U7DQoJaWYgKG1fYkJsdXJFbmFibGUpDQoJew0KCQlpZiAoRkFJTEVEKGJsdXJUYXJnZXQuUmVzdG9yZSgpKSkgcmV0dXJuIGZhbHNlOw0KCQlpZiAoRkFJTEVEKFNUQVRFTUFOQUdFUi5TZXRUZXh0dXJlKDAsIG1fbHBTbm93VGV4dHVyZSkpKSByZXR1cm4gZmFsc2U7DQoJCWNvbnN0IGZsb2F0IHggPSBzdGF0aWNfY2FzdDxmbG9hdD4ob3JpZ2luYWxWaWV3cG9ydC5YKSwgeSA9IHN0YXRpY19jYXN0PGZsb2F0PihvcmlnaW5hbFZpZXdwb3J0LlkpOw0KCQljb25zdCBmbG9hdCByaWdodCA9IHggKyBvcmlnaW5hbFZpZXdwb3J0LldpZHRoLCBib3R0b20gPSB5ICsgb3JpZ2luYWxWaWV3cG9ydC5IZWlnaHQ7DQoJCUJsdXJWZXJ0ZXggdmVydGljZXNbNF0gPSB7DQoJCQlCbHVyVmVydGV4KEQzRFhWRUNUT1IzKHgseSwwKSwxLDB4RkZGRkZGLDAsMCksDQoJCQlCbHVyVmVydGV4KEQzRFhWRUNUT1IzKHJpZ2h0LHksMCksMSwweEZGRkZGRiwxLDApLA0KCQkJQmx1clZlcnRleChEM0RYVkVDVE9SMyh4LGJvdHRvbSwwKSwxLDB4RkZGRkZGLDAsMSksDQoJCQlCbHVyVmVydGV4KEQzRFhWRUNUT1IzKHJpZ2h0LGJvdHRvbSwwKSwxLDB4RkZGRkZGLDEsMSl9Ow0KCQlpZiAoRkFJTEVEKFNUQVRFTUFOQUdFUi5TZXRGVkYoRDNERlZGX1hZWlJIVyB8IEQzREZWRl9ESUZGVVNFIHwgRDNERlZGX1RFWDEpKSkgcmV0dXJuIGZhbHNlOw0KCQlpZiAoRkFJTEVEKFNUQVRFTUFOQUdFUi5EcmF3UHJpbWl0aXZlVVAoRDNEUFRfVFJJQU5HTEVTVFJJUCwgMiwgdmVydGljZXMsIHNpemVvZihCbHVyVmVydGV4KSkpKSByZXR1cm4gZmFsc2U7DQoJfQ0KCXJldHVybiBTVUNDRUVERUQoZHJhd2luZ1N0YXRlLlJlc3RvcmUoKSk7DQp9DQoNCmJvb2wgQ1Nub3dFbnZpcm9ubWVudDo6X19DcmVhdGVCbHVyVGV4dHVyZSgpDQp7DQoJaWYgKCFtX2JCbHVyRW5hYmxlKQ0KCQlyZXR1cm4gdHJ1ZTsNCg0KCWlmIChGQUlMRUQobXNfbHBkM2REZXZpY2UtPkNyZWF0ZVRleHR1cmUobV93Qmx1clRleHR1cmVTaXplLCBtX3dCbHVyVGV4dHVyZVNpemUsIDEsIEQzRFVTQUdFX1JFTkRFUlRBUkdFVCwgRDNERk1UX1g4UjhHOEI4LCBEM0RQT09MX0RFRkFVTFQsICZtX2xwU25vd1RleHR1cmUsIG51bGxwdHIpKSkNCgkJcmV0dXJuIGZhbHNlOw0KCWlmIChGQUlMRUQobV9scFNub3dUZXh0dXJlLT5HZXRTdXJmYWNlTGV2ZWwoMCwgJm1fbHBTbm93UmVuZGVyVGFyZ2V0U3VyZmFjZSkpKQ0KCQlyZXR1cm4gZmFsc2U7DQoJaWYgKEZBSUxFRChtc19scGQzZERldmljZS0+Q3JlYXRlRGVwdGhTdGVuY2lsU3VyZmFjZShtX3dCbHVyVGV4dHVyZVNpemUsIG1fd0JsdXJUZXh0dXJlU2l6ZSwgRDNERk1UX0QxNiwgRDNETVVMVElTQU1QTEVfTk9ORSwgMCwgVFJVRSwgJm1fbHBTbm93RGVwdGhTdXJmYWNlLCBudWxscHRyKSkpDQoJCXJldHVybiBmYWxzZTsNCg0KCXJldHVybiB0cnVlOw0KfQ0KDQpib29sIENTbm93RW52aXJvbm1lbnQ6Ol9fQ3JlYXRlR2VvbWV0cnkoKQ0Kew0KCWlmICghbXNfbHBkM2REZXZpY2UgfHwgbV9wVkIgfHwgbV9wSUIgfHwgIW1fZHdQYXJ0aWNsZU1heE51bSB8fCBtX2R3UGFydGljbGVNYXhOdW0gPiAxNjM4NCkgcmV0dXJuIGZhbHNlOw0KCWlmIChGQUlMRUQobXNfbHBkM2REZXZpY2UtPkNyZWF0ZVZlcnRleEJ1ZmZlcihzaXplb2YoU1BhcnRpY2xlVmVydGV4KSAqIG1fZHdQYXJ0aWNsZU1heE51bSAqIDQsDQoJCUQzRFVTQUdFX0RZTkFNSUMgfCBEM0RVU0FHRV9XUklURU9OTFksDQoJCUQzREZWRl9YWVogfCBEM0RGVkZfVEVYMSwNCgkJRDNEUE9PTF9ERUZBVUxULA0KCQkmbV9wVkIsIG51bGxwdHIpKSkNCgkJcmV0dXJuIGZhbHNlOw0KDQoJaWYgKEZBSUxFRChtc19scGQzZERldmljZS0+Q3JlYXRlSW5kZXhCdWZmZXIoc2l6ZW9mKFdPUkQpICogbV9kd1BhcnRpY2xlTWF4TnVtICogNiwNCgkJRDNEVVNBR0VfRFlOQU1JQywNCgkJRDNERk1UX0lOREVYMTYsDQoJCUQzRFBPT0xfREVGQVVMVCwNCgkJJm1fcElCLCBudWxscHRyKSkpDQoJCXJldHVybiBmYWxzZTsNCg0KCVdPUkQqIGRzdEluZGljZXMgPSBudWxscHRyOw0KCWlmICghR2VvbWV0cnlCdWZmZXJVcGxvYWQ6OkxvY2sobV9wSUIsIHNpemVvZihXT1JEKSAqIG1fZHdQYXJ0aWNsZU1heE51bSAqIDYsICh2b2lkKiopJmRzdEluZGljZXMpKQ0KCQlyZXR1cm4gZmFsc2U7DQoNCgljb25zdCBXT1JEIGNfYXdGaWxsUmVjdEluZGljZXNbNl0gPSB7IDAsIDIsIDEsIDIsIDMsIDEsIH07DQoJZm9yIChpbnQgaSA9IDA7IGkgPCBtX2R3UGFydGljbGVNYXhOdW07ICsraSkNCgl7DQoJCWZvciAoaW50IGogPSAwOyBqIDwgNjsgKytqKQ0KCQl7DQoJCQlkc3RJbmRpY2VzW2kqNiArIGpdID0gaSo0ICsgY19hd0ZpbGxSZWN0SW5kaWNlc1tqXTsNCgkJfQ0KCX0NCg0KCXJldHVybiBTVUNDRUVERUQobV9wSUItPlVubG9jaygpKTsNCn0NCg0KYm9vbCBDU25vd0Vudmlyb25tZW50OjpDcmVhdGUoKQ0Kew0KCURlc3Ryb3koKTsNCgljb25zdCBhdXRvIGNsZWFudXAgPSBbdGhpc10oKSB7IERlc3Ryb3koKTsgfTsNCglHcmFwaGljc1N0YXJ0dXA6OlJvbGxiYWNrPGRlY2x0eXBlKGNsZWFudXApPiByb2xsYmFjayhjbGVhbnVwKTsNCglpZiAoIW1zX2xwZDNkRGV2aWNlKSByZXR1cm4gZmFsc2U7DQoNCglpZiAoIV9fQ3JlYXRlQmx1clRleHR1cmUoKSkNCgkJcmV0dXJuIGZhbHNlOw0KDQoJaWYgKCFfX0NyZWF0ZUdlb21ldHJ5KCkpDQoJCXJldHVybiBmYWxzZTsNCg0KCUNSZXNvdXJjZSogcmVzb3VyY2UgPSBDUmVzb3VyY2VNYW5hZ2VyOjpJbnN0YW5jZSgpLkdldFJlc291cmNlUG9pbnRlcigiZDoveW1pciB3b3JrL3NwZWNpYWwvc25vdy5kZHMiKTsNCglpZiAoIXJlc291cmNlIHx8ICFyZXNvdXJjZS0+SXNUeXBlKENHcmFwaGljSW1hZ2U6OlR5cGUoKSkpIHJldHVybiBmYWxzZTsNCglDR3JhcGhpY0ltYWdlKiBwSW1hZ2UgPSBzdGF0aWNfY2FzdDxDR3JhcGhpY0ltYWdlKj4ocmVzb3VyY2UpOw0KCW1fcEltYWdlSW5zdGFuY2UgPSBDR3JhcGhpY0ltYWdlSW5zdGFuY2U6Ok5ldygpOw0KCWlmICghbV9wSW1hZ2VJbnN0YW5jZSkgcmV0dXJuIGZhbHNlOw0KCW1fcEltYWdlSW5zdGFuY2UtPlNldEltYWdlUG9pbnRlcihwSW1hZ2UpOw0KCWlmIChtX3BJbWFnZUluc3RhbmNlLT5Jc0VtcHR5KCkgfHwgIXBJbWFnZS0+R2V0VGV4dHVyZVJlZmVyZW5jZSgpLkdldEQzRFRleHR1cmUoKSkgcmV0dXJuIGZhbHNlOw0KCXJvbGxiYWNrLkNvbXBsZXRlKCk7DQoJcmV0dXJuIHRydWU7DQp9DQoNCnZvaWQgQ1Nub3dFbnZpcm9ubWVudDo6RGVzdHJveSgpDQp7DQoJU0FGRV9SRUxFQVNFKG1fbHBTbm93VGV4dHVyZSk7DQoJU0FGRV9SRUxFQVNFKG1fbHBTbm93UmVuZGVyVGFyZ2V0U3VyZmFjZSk7DQoJU0FGRV9SRUxFQVNFKG1fbHBTbm93RGVwdGhTdXJmYWNlKTsNCglTQUZFX1JFTEVBU0UobV9wVkIpOw0KCVNBRkVfUkVMRUFTRShtX3BJQik7DQoNCglzdGxfd2lwZShtX2tWY3RfcGtQYXJ0aWNsZVNub3cpOw0KCUNTbm93UGFydGljbGU6OkRlc3Ryb3lQb29sKCk7DQoNCglpZiAobV9wSW1hZ2VJbnN0YW5jZSkNCgl7DQoJCUNHcmFwaGljSW1hZ2VJbnN0YW5jZTo6RGVsZXRlKG1fcEltYWdlSW5zdGFuY2UpOw0KCQltX3BJbWFnZUluc3RhbmNlID0gTlVMTDsNCgl9DQoNCglfX0luaXRpYWxpemUoKTsNCn0NCg0Kdm9pZCBDU25vd0Vudmlyb25tZW50OjpfX0luaXRpYWxpemUoKQ0Kew0KCW1fYlNub3dFbmFibGUgPSBGQUxTRTsNCgltX3YzQ2VudGVyID0gRDNEWFZFQ1RPUjMoMCwgMCwgMCk7DQoJbV9scFNub3dUZXh0dXJlID0gTlVMTDsNCgltX2xwU25vd1JlbmRlclRhcmdldFN1cmZhY2UgPSBOVUxMOw0KCW1fbHBTbm93RGVwdGhTdXJmYWNlID0gTlVMTDsNCgltX3BWQiA9IE5VTEw7DQoJbV9wSUIgPSBOVUxMOw0KCW1fcEltYWdlSW5zdGFuY2UgPSBOVUxMOw0KDQoJbV9rVmN0X3BrUGFydGljbGVTbm93LnJlc2VydmUobV9kd1BhcnRpY2xlTWF4TnVtKTsNCn0NCg0KQ1Nub3dFbnZpcm9ubWVudDo6Q1Nub3dFbnZpcm9ubWVudCgpDQp7DQoJbV9iQmx1ckVuYWJsZSA9IEZBTFNFOw0KCW1fZHdQYXJ0aWNsZU1heE51bSA9IDMwMDA7DQoJbV93Qmx1clRleHR1cmVTaXplID0gNTEyOw0KDQoJX19Jbml0aWFsaXplKCk7DQp9DQpDU25vd0Vudmlyb25tZW50Ojp+Q1Nub3dFbnZpcm9ubWVudCgpDQp7DQoJRGVzdHJveSgpOw0KfQ0K"}, "file-1": {"path": "src/GameLib/SnowEnvironment.h", "before": "I3ByYWdtYSBvbmNlCgojaW5jbHVkZSAiRXRlckxpYi9HcnBTY3JlZW4uaCIKCmNsYXNzIENTbm93UGFydGljbGU7CgpjbGFzcyBDU25vd0Vudmlyb25tZW50IDogcHVibGljIENTY3JlZW4KewoJcHVibGljOgoJCUNTbm93RW52aXJvbm1lbnQoKTsKCQl2aXJ0dWFsIH5DU25vd0Vudmlyb25tZW50KCk7CgoJCWJvb2wgQ3JlYXRlKCk7CgkJdm9pZCBEZXN0cm95KCk7CgoJCXZvaWQgRW5hYmxlKCk7CgkJdm9pZCBEaXNhYmxlKCk7CgoJCXZvaWQgVXBkYXRlKGNvbnN0IEQzRFhWRUNUT1IzICYgY19ydjNQb3MpOwoJCXZvaWQgRGVmb3JtKCk7CgkJdm9pZCBSZW5kZXIoKTsKCglwcm90ZWN0ZWQ6CQkKCQl2b2lkIF9fSW5pdGlhbGl6ZSgpOwoJCWJvb2wgX19DcmVhdGVCbHVyVGV4dHVyZSgpOwoJCWJvb2wgX19DcmVhdGVHZW9tZXRyeSgpOwoJCXZvaWQgX19CZWdpbkJsdXIoKTsKCQl2b2lkIF9fQXBwbHlCbHVyKCk7CgoJcHJvdGVjdGVkOgoJCUxQRElSRUNUM0RTVVJGQUNFOSBtX2xwT2xkU3VyZmFjZTsKCQlMUERJUkVDVDNEU1VSRkFDRTkgbV9scE9sZERlcHRoU3RlbmNpbFN1cmZhY2U7CgoJCUxQRElSRUNUM0RURVhUVVJFOSBtX2xwU25vd1RleHR1cmU7CgkJTFBESVJFQ1QzRFNVUkZBQ0U5IG1fbHBTbm93UmVuZGVyVGFyZ2V0U3VyZmFjZTsKCQlMUERJUkVDVDNEU1VSRkFDRTkgbV9scFNub3dEZXB0aFN1cmZhY2U7CgoJCUxQRElSRUNUM0RURVhUVVJFOSBtX2xwQWNjdW1UZXh0dXJlOwoJCUxQRElSRUNUM0RTVVJGQUNFOSBtX2xwQWNjdW1SZW5kZXJUYXJnZXRTdXJmYWNlOwoJCUxQRElSRUNUM0RTVVJGQUNFOSBtX2xwQWNjdW1EZXB0aFN1cmZhY2U7CgoJCUxQRElSRUNUM0RWRVJURVhCVUZGRVI5IG1fcFZCOwoJCUxQRElSRUNUM0RJTkRFWEJVRkZFUjkgbV9wSUI7CgoJCUQzRFhWRUNUT1IzIG1fdjNDZW50ZXI7CgoJCVdPUkQgbV93Qmx1clRleHR1cmVTaXplOwoJCUNHcmFwaGljSW1hZ2VJbnN0YW5jZSAqIG1fcEltYWdlSW5zdGFuY2U7CgkJc3RkOjp2ZWN0b3I8Q1Nub3dQYXJ0aWNsZSo+IG1fa1ZjdF9wa1BhcnRpY2xlU25vdzsKCgkJRFdPUkQgbV9kd1BhcnRpY2xlTWF4TnVtOwoJCUJPT0wgbV9iQmx1ckVuYWJsZTsKCgkJQk9PTCBtX2JTbm93RW5hYmxlOwp9Owo=", "after": "I3ByYWdtYSBvbmNlDQoNCiNpbmNsdWRlICJFdGVyTGliL0dycFNjcmVlbi5oIg0KI2luY2x1ZGUgPHZlY3Rvcj4NCg0KY2xhc3MgQ0dyYXBoaWNJbWFnZUluc3RhbmNlOw0KY2xhc3MgQ1Nub3dQYXJ0aWNsZTsNCg0KY2xhc3MgQ1Nub3dFbnZpcm9ubWVudCA6IHB1YmxpYyBDU2NyZWVuDQp7DQoJcHVibGljOg0KCQlDU25vd0Vudmlyb25tZW50KCk7DQoJCXZpcnR1YWwgfkNTbm93RW52aXJvbm1lbnQoKTsNCg0KCQlib29sIENyZWF0ZSgpOw0KCQl2b2lkIERlc3Ryb3koKTsNCg0KCQl2b2lkIEVuYWJsZSgpOw0KCQl2b2lkIERpc2FibGUoKTsNCg0KCQl2b2lkIFVwZGF0ZShjb25zdCBEM0RYVkVDVE9SMyAmIGNfcnYzUG9zKTsNCgkJdm9pZCBEZWZvcm0oKTsNCgkJYm9vbCBSZW5kZXIoKTsgLy8gRmFsc2Ugd2hlbiBza2lwcGVkIG9yIGZhaWxlZDsgb3JkaW5hcnkgY2FsbGVycyBtYXkgaWdub3JlLg0KDQoJcHJvdGVjdGVkOgkJDQoJCXZvaWQgX19Jbml0aWFsaXplKCk7DQoJCWJvb2wgX19DcmVhdGVCbHVyVGV4dHVyZSgpOw0KCQlib29sIF9fQ3JlYXRlR2VvbWV0cnkoKTsNCg0KCXByb3RlY3RlZDoNCg0KCQlMUERJUkVDVDNEVEVYVFVSRTkgbV9scFNub3dUZXh0dXJlOw0KCQlMUERJUkVDVDNEU1VSRkFDRTkgbV9scFNub3dSZW5kZXJUYXJnZXRTdXJmYWNlOw0KCQlMUERJUkVDVDNEU1VSRkFDRTkgbV9scFNub3dEZXB0aFN1cmZhY2U7DQoNCgkJTFBESVJFQ1QzRFZFUlRFWEJVRkZFUjkgbV9wVkI7DQoJCUxQRElSRUNUM0RJTkRFWEJVRkZFUjkgbV9wSUI7DQoNCgkJRDNEWFZFQ1RPUjMgbV92M0NlbnRlcjsNCg0KCQlXT1JEIG1fd0JsdXJUZXh0dXJlU2l6ZTsNCgkJQ0dyYXBoaWNJbWFnZUluc3RhbmNlICogbV9wSW1hZ2VJbnN0YW5jZTsNCgkJc3RkOjp2ZWN0b3I8Q1Nub3dQYXJ0aWNsZSo+IG1fa1ZjdF9wa1BhcnRpY2xlU25vdzsNCg0KCQlEV09SRCBtX2R3UGFydGljbGVNYXhOdW07DQoJCUJPT0wgbV9iQmx1ckVuYWJsZTsNCg0KCQlCT09MIG1fYlNub3dFbmFibGU7DQp9Ow0K"}}</script></main><footer><a href="index.html">All topics</a> · Static review · No external dependencies</footer></body></html>
